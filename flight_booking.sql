@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 24, 2023 at 04:11 PM
+-- Generation Time: Dec 24, 2023 at 09:57 PM
 -- Server version: 8.0.17
 -- PHP Version: 7.3.10
 
@@ -47,7 +47,11 @@ CREATE TABLE `company` (
 --
 
 INSERT INTO `company` (`ID`, `Name`, `Bio`, `Address`, `Location`, `username`, `password`, `email`, `tel`, `Logo`, `Account`) VALUES
-(1, 'root1', '', '', '', '', 'menna2003', 'ff', 0, '', 0);
+(1, 'root1', '', '', '', '', 'menna2003', 'ff', 0, '', 0),
+(5, 'company', '', '', '', '', '123456', 'mennaahmed.ma54@gmail.com', 111111111, '', 0),
+(6, 'company', '', '', '', '', '11111', 'mennaahmed.ma54@gmail.com', 111111111, '', 0),
+(7, 'company', '', '', '', '', '12334', 'mennaahmed.ma54@gmail.com', 111111111, '', 0),
+(8, 'company2', '', 'gh', 'hhb', '', '12345', 'mennaahmed.ma54@gmail.com', 111111111, '', 2147483647);
 
 -- --------------------------------------------------------
 
@@ -113,8 +117,10 @@ CREATE TABLE `passenger` (
 INSERT INTO `passenger` (`ID`, `Name`, `email`, `password`, `tel`, `photo`, `passport`, `Account`) VALUES
 (1, 'root', 'ff', 'menna2003', 0, '', '', 0),
 (2, 'passenger', 'passenger@email', 'menna2003', 124783, '', '', 0),
-(3, 'passenger', 'passenger@email', 'menna2003', 124783, '', '', 122),
-(4, 'pass', 'fff', 'wwwwwwww', 7777, '', '', 0);
+(5, 'pass', 'mennaahmed.ma54@gmail.com', '1223', 111111111, '', '', 0),
+(7, 'passnger', 'mennaahmed.ma54@gmail.com', '122', 111111111, '', '', 0),
+(9, 'passnger2', 'mennaahmed.ma54@gmail.com', '122', 111111111, '', '', 0),
+(10, 'passnger3', 'mennaahmed.ma54@gmail.com', '122', 111111111, '', '', 2147483647);
 
 -- --------------------------------------------------------
 
@@ -135,8 +141,7 @@ CREATE TABLE `passengerflight` (
 -- Indexes for table `company`
 --
 ALTER TABLE `company`
-  ADD PRIMARY KEY (`ID`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indexes for table `companyflight`
@@ -162,7 +167,8 @@ ALTER TABLE `itinerary`
 -- Indexes for table `passenger`
 --
 ALTER TABLE `passenger`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `Name` (`Name`);
 
 --
 -- Indexes for table `passengerflight`
@@ -179,7 +185,7 @@ ALTER TABLE `passengerflight`
 -- AUTO_INCREMENT for table `company`
 --
 ALTER TABLE `company`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `flights`
@@ -197,7 +203,7 @@ ALTER TABLE `itinerary`
 -- AUTO_INCREMENT for table `passenger`
 --
 ALTER TABLE `passenger`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables

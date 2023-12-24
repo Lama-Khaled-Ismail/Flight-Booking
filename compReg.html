@@ -17,20 +17,33 @@ function removeFile() {
     input.value = ""; // Clear the input
     showFile(); // Update the display
 }
+var fileNameDisplay = document.getElementById('file-name-display');
+    fileNameDisplay.addEventListener('click', removeFile);
+
+    // Initial call to set the default state of the file name display
+    showFile();
 
 // Attach an event listener to clear the file when the label is clicked
-document.getElementById('file-name-display').addEventListener('click', function() {
-    removeFile();
-});
-    </script>    
+
+</script>    
 </head>
 
 <html>
 <div class="formbold-main-wrapper">
     
     <div class="formbold-form-wrapper">
-      <form action="compReg.php" method="POST">
+      <form action="compReg.php" method="post" enctype="multipart/form-data">
           <div class="formbold-input-flex">
+            <div>
+              <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Username"
+              class="formbold-form-input" required
+              />
+              <label for="username" class="formbold-form-label"> Username </label>
+          </div>
             <div>
                 <input
                 type="text"
@@ -59,10 +72,9 @@ document.getElementById('file-name-display').addEventListener('click', function(
                 type="tel"
                 name="acc"
                 id="acc"
-                inputmode="numeric" pattern="[0-9\s]{13,19}" 
-                autocomplete="cc-number" maxlength="19" 
-                placeholder="xxxx xxxx xxxx xxxx" required
-                class="formbold-form-input" width="90%" required
+                maxlength="19" 
+                placeholder="xxxx xxxx xxxx xxxx" 
+                class="formbold-form-input"  required
                 />
                 <label for="email" class="formbold-form-label"> Credit Card Number </label>
             </div>

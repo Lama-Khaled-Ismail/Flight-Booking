@@ -1,53 +1,53 @@
 <html>
+<body>
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $host = 'localhost';  $user ="root";  $pass = 'menna2003';  $dbname = 'flight_booking';  
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $host = 'localhost';
+    $user = "root";
+    $dbname = 'flight_booking';
 
-    $conn = mysqli_connect($host, $user, $pass,$dbname);  
-    if(!$conn){  
+    $conn = new mysqli($host, $user, "", $dbname);
+    if ($conn->connect_error) {
+        die('Connection failed: ' . $conn->connect_error);
+    }
 
-        die('Could not connect: '.mysqli_connect_error());  
-      
-      }  
-      
-      echo 'Connected successfully<br/>';  
-
-
-    // Bind parameters (s for string)
-    $qry="SELECT Top 1 ID FROM company Order By ID Desc"; 
-    $id = $conn->query($qry);echo $id;
-    $account = $_POST['acc']; $address=$_POST['address']; $loc = $_POST['location'];
-    $qry = "UPDATE passenger SET Account = {$account}  WHERE passenger ID = {$id}";
+    // Fetching the latest ID
+    $qry = "SELECT ID FROM company ORDER BY ID DESC LIMIT 1";
     $result = $conn->query($qry);
-    $qry = "UPDATE passenger SET Address = {$address}  WHERE passenger ID = {$id}";
-    $result = $conn->query($qry);
-    $qry = "UPDATE passenger SET Location = {$loc}  WHERE passenger ID = {$id}";
-    $result = $conn->query($qry);
+    if ($result->num_rows > 0) {
+        print_r($_FILES);
+        if(! isset($_FILES['upload']['name'])){
+            echo "notset";
+        }
+        $row = $result->fetch_assoc();
+        $id = $row['ID'];
+        $file = $_FILES["upload"];
+
+        // Read the file
+        $fp = fopen($file["tmp_name"], 'rb');
+        $data = fread($fp, filesize($file["tmp_name"]));
+        fclose($fp);
+        echo $data;
+
+        $address = $_POST['address']; $acc = $_POST['acc'];$loc = $_POST['location'];
+
+        // Prepare statements to update data
+        $stmt = $conn->prepare("UPDATE company SET Account = ?, Address = ?, Location = ? WHERE ID = ?");
+        if (!$stmt) {
+            // Prepare failed
+            echo "failed";
+        } else {
+            $stmt->bind_param("issi",$acc, $address, $loc, $id);
+           // $stmt->send_long_data(4, $blob); 
+
+
+        $stmt->close();
+    }
     
-    if($_POST['type']=='passenger'){
-        mysqli_close($conn);  
-
-        header('Location: passReg.html');
-
-        exit;
     }
-    else{
-        mysqli_close($conn);  
-
-        header('Location: compReg.html');
-        exit;
-
-    }
-      
-      
-
+    $conn->close();
 } else {
-    echo "Form not submitted";
 }
-
-
 ?>
+</body>
 </html>
-
-
-

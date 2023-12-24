@@ -5,9 +5,9 @@
 //echo"fff";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = isset($_POST["username"]) ? $_POST["username"] : 'Not set';
-    $host = 'localhost';  $user ='root';  $pass = 'menna2003';  $dbname = 'flight_booking';  
+    $host = 'localhost';  $user ='root';   $dbname = 'flight_booking';  
 
-    $conn = mysqli_connect($host, $user, $pass,$dbname);  
+    $conn = mysqli_connect($host, $user,"",$dbname);  
     if(!$conn){  
 
         die('Could not connect: '.mysqli_connect_error());  
