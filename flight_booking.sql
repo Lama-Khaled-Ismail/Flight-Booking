@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 4.9.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Dec 23, 2023 at 07:36 PM
--- Server version: 8.0.31
--- PHP Version: 8.0.26
+-- Host: localhost
+-- Generation Time: Dec 24, 2023 at 04:11 PM
+-- Server version: 8.0.17
+-- PHP Version: 7.3.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -27,9 +28,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `company`
 --
 
-DROP TABLE IF EXISTS `company`;
-CREATE TABLE IF NOT EXISTS `company` (
-  `ID` int NOT NULL,
+CREATE TABLE `company` (
+  `ID` int(11) NOT NULL,
   `Name` varchar(100) NOT NULL,
   `Bio` text NOT NULL,
   `Address` text NOT NULL,
@@ -37,12 +37,57 @@ CREATE TABLE IF NOT EXISTS `company` (
   `username` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `tel` int NOT NULL,
+  `tel` int(11) NOT NULL,
   `Logo` blob NOT NULL,
-  `Flights` int NOT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `Account` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `company`
+--
+
+INSERT INTO `company` (`ID`, `Name`, `Bio`, `Address`, `Location`, `username`, `password`, `email`, `tel`, `Logo`, `Account`) VALUES
+(1, 'root1', '', '', '', '', 'menna2003', 'ff', 0, '', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `companyflight`
+--
+
+CREATE TABLE `companyflight` (
+  `company_id` int(11) NOT NULL,
+  `flight_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `flights`
+--
+
+CREATE TABLE `flights` (
+  `ID` int(11) NOT NULL,
+  `Name` varchar(100) NOT NULL,
+  `Completed` tinyint(1) NOT NULL DEFAULT '0',
+  `RegPassangers` int(11) NOT NULL,
+  `PendPassangers` int(11) NOT NULL,
+  `fees` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itinerary`
+--
+
+CREATE TABLE `itinerary` (
+  `ID` int(11) NOT NULL,
+  `flight_id` int(11) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -50,18 +95,133 @@ CREATE TABLE IF NOT EXISTS `company` (
 -- Table structure for table `passenger`
 --
 
-DROP TABLE IF EXISTS `passenger`;
-CREATE TABLE IF NOT EXISTS `passenger` (
-  `ID` int NOT NULL,
+CREATE TABLE `passenger` (
+  `ID` int(11) NOT NULL,
   `Name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `tel` int NOT NULL,
+  `tel` int(11) NOT NULL,
   `photo` tinyblob NOT NULL,
   `passport` blob NOT NULL,
-  `flights` int NOT NULL,
-  `Account` int NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `Account` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `passenger`
+--
+
+INSERT INTO `passenger` (`ID`, `Name`, `email`, `password`, `tel`, `photo`, `passport`, `Account`) VALUES
+(1, 'root', 'ff', 'menna2003', 0, '', '', 0),
+(2, 'passenger', 'passenger@email', 'menna2003', 124783, '', '', 0),
+(3, 'passenger', 'passenger@email', 'menna2003', 124783, '', '', 122),
+(4, 'pass', 'fff', 'wwwwwwww', 7777, '', '', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `passengerflight`
+--
+
+CREATE TABLE `passengerflight` (
+  `flight_id` int(11) NOT NULL,
+  `passenger_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `company`
+--
+ALTER TABLE `company`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Indexes for table `companyflight`
+--
+ALTER TABLE `companyflight`
+  ADD KEY `company_id` (`company_id`),
+  ADD KEY `flight_id` (`flight_id`);
+
+--
+-- Indexes for table `flights`
+--
+ALTER TABLE `flights`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `itinerary`
+--
+ALTER TABLE `itinerary`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `flight_id` (`flight_id`);
+
+--
+-- Indexes for table `passenger`
+--
+ALTER TABLE `passenger`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `passengerflight`
+--
+ALTER TABLE `passengerflight`
+  ADD KEY `flight_id` (`flight_id`),
+  ADD KEY `passenger_id` (`passenger_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `company`
+--
+ALTER TABLE `company`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `flights`
+--
+ALTER TABLE `flights`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `itinerary`
+--
+ALTER TABLE `itinerary`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `passenger`
+--
+ALTER TABLE `passenger`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `companyflight`
+--
+ALTER TABLE `companyflight`
+  ADD CONSTRAINT `companyflight_ibfk_1` FOREIGN KEY (`flight_id`) REFERENCES `flights` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `companyflight_ibfk_2` FOREIGN KEY (`company_id`) REFERENCES `company` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `itinerary`
+--
+ALTER TABLE `itinerary`
+  ADD CONSTRAINT `itinerary_ibfk_1` FOREIGN KEY (`flight_id`) REFERENCES `flights` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `passengerflight`
+--
+ALTER TABLE `passengerflight`
+  ADD CONSTRAINT `passengerflight_ibfk_1` FOREIGN KEY (`flight_id`) REFERENCES `flights` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `passengerflight_ibfk_2` FOREIGN KEY (`passenger_id`) REFERENCES `passenger` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
