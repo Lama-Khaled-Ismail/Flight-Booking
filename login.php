@@ -58,8 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       if ($Cstmt->num_rows > 0) {
           echo "found company";
           $Cstmt->close();
+          $_SESSION['username'] = $name;
+
           $conn->close();  
-          //header('Location: compReg.html');
+          header('Location: comphome.php');
           exit;
       } else {
           echo "USER NOT FOUND";
