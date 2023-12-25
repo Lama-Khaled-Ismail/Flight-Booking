@@ -3,6 +3,7 @@
 <?php
 //phpinfo( );
 //echo"fff";
+include('session.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = isset($_POST["username"]) ? $_POST["username"] : 'Not set';
     $host = 'localhost';  $user ='root';   $dbname = 'flight_booking';  
@@ -31,8 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       
       if ($Pstmt->num_rows > 0) {
           echo "found passenger";
+          // added session
+          $_SESSION['username'] = $name;
+          
           $Pstmt->close();
           $conn->close();  
+
           //header('Location: passReg.html');
           exit;
       }
