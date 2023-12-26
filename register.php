@@ -38,9 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     else{
         mysqli_close($conn);  
-
         header('Location: compReg.html');
-
         exit;
 
     }
