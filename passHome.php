@@ -11,8 +11,8 @@
     die("Connection failed: " . mysqli_connect_error());
 }
 
- $username = $_SESSION['username'];
- //$username ='pass';
+ //$username = $_SESSION['username'];
+ $username ='pass';
  $sql = "SELECT * FROM passenger WHERE Name='pass'";
  $result = mysqli_query($conn, $sql);
 
@@ -25,7 +25,7 @@
  $tel =$row['tel'];
  $photo =$row['photo'];
  $base64Image = base64_encode($photo);
- $imageMimeType = 'image/jpeg';
+ $imageMimeType = 'image/png';
  $id=$row['ID'];
 
  $sql ="SELECT * FROM passengerflight WHERE passenger_id=$id";

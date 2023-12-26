@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+
 $comname = "com";
 $bio = "bio";
 $dbname = 'flight_booking';
