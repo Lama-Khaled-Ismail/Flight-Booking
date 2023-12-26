@@ -15,8 +15,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// todo remove
-$passengerID = 5;
+$sql = "SELECT * FROM passenger WHERE Name = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $_SESSION['username']);
+$stmt->execute();
+$result = $stmt->get_result();
+$crow = $result->fetch_assoc();
+$passengerID = $crow['ID'];
 
 // Get the flight ID from the URL
 $flightID = $_GET['flight_id'];
@@ -61,7 +66,7 @@ if ($passengerResult->num_rows > 0 && $flightResult->num_rows > 0) {
         $conn->query($updateRegisteredPassengersQuery);
 
         // Add a new row to the passenger_flight table
-        $addPassengerFlightQuery = "INSERT INTO passengerflight (passenger_id, flight_id) VALUES ('$passengerID', '$flightID')";
+        $addPassengerFlightQuery = "INSERT INTO passengerflight (passenger_id, flight_id, Registered) VALUES ('$passengerID', '$flightID',0)";
         $conn->query($addPassengerFlightQuery);
 
         // Display payment form

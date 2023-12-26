@@ -37,7 +37,7 @@ $row = mysqli_fetch_assoc($result);
 $flightArray = array(); 
 while( $row = mysqli_fetch_assoc($result)){
     $flight_id=$row['flight_id'];
-    $sql_flight="SELECT * FROM flights WHERE Completed=1 AND ID =flight_id";
+    $sql_flight="SELECT * FROM flights WHERE Completed=0 AND ID =$flight_id";
     $result_flight=mysqli_query($conn, $sql_flight);
     if (!$result_flight) {
         die("Query failed: " . mysqli_error($conn));

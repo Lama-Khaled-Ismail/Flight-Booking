@@ -163,7 +163,7 @@ if ($flightResult->num_rows > 0) {
         // Message button
         echo '<tr><td>';
         echo '<div class="payment-options">';
-        echo '<a href="message_company.php?flight_id=' . $flightID . '" class="message-button">Message the Company</a>';
+        echo '<a href="message.php?flight_id=' . $flightID . '" class="message-button">Message the Company</a>';
         echo '</div>';
         echo '</td></tr>';
         echo '</table>';

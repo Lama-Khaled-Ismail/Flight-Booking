@@ -97,14 +97,17 @@ cursor: pointer;
 
         <?php
         // Loop over the array and create a table row for each flight
-        foreach ($flightArray as $flight) {
-            echo "<tr>
-                    <td>{$flight['ID']}</td>
-                    <td>{$flight['Name']}</td>
-                    <td>{$flight['fees']}</td>
-                  </tr>";
+        if(isset($flightArray)){
+            foreach ($flightArray as $flight) {
+                echo "<tr>
+                        <td>{$flight['ID']}</td>
+                        <td>{$flight['Name']}</td>
+                        <td>{$flight['fees']}</td>
+                      </tr>";
+            }
         }
-        ?>
+        
+        ?>  
         </table>
 
         <h2>Current Flights<h2>
@@ -130,8 +133,14 @@ cursor: pointer;
     </div>
 
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search...">
-        <button type="button" onclick="searchFunction()">Search</button>
+    <button onclick="redirectToPage()">Search Flights</button>
+
+<script>
+  function redirectToPage() {
+    // Replace 'targetPage.html' with the URL of the page you want to redirect to
+    window.location.href = 'searchFlight.php';
+  }
+</script>
     </div>
 
    
