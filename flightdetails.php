@@ -1,38 +1,68 @@
 <?php
-session_start();
-
-
-$comname = "com";
-$bio = "bio";
 $dbname = 'flight_booking';
 $conn = new mysqli('localhost', "root", "", $dbname);
-
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-//print_r($_SESSION); //echo $comname;
-if (isset($_SESSION['username'])) {
-  $comname = $_SESSION['username'];
-  //echo $comname;
-}
- $sql = "SELECT * FROM company WHERE Name = ?";
+$sql = "SELECT * FROM company WHERE Name = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $_SESSION['username']);
 $stmt->execute();
 $result = $stmt->get_result();
 $crow = $result->fetch_assoc();
 $comname = $_SESSION['username'];
-   $bio = $crow['Bio'];
+$bio = $crow['Bio'];
 $logo = $crow['Logo'];
-//   echo $comname;
-$sql = "SELECT ID FROM flights WHERE company_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $crow['ID']);
-$stmt->execute();
-$result = $stmt->get_result();
 
+$sql = "SELECT * FROM flights WHERE ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $_GET['fid']);
+$stmt->execute();
+$flight = $stmt->get_result();
+
+$sql = "SELECT city FROM itinerary WHERE flight_id= ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $_GET['fid']);
+$stmt->execute();
+$iternaity = $stmt->get_result();
+
+
+$sql = "SELECT p.name FROM passenger p JOIN passengerflight pf ON p.ID = pf.passenger_id
+        JOIN flights f ON pf.flight_id = f.ID
+        WHERE f.ID = ? AND pf.Registered = True";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $_GET['fid']);
+$stmt->execute();
+$reg_passengers = $stmt->get_result();
+
+$sql = "SELECT p.name FROM passenger p JOIN passengerflight pf ON p.ID = pf.passenger_id
+        JOIN flights f ON pf.flight_id = f.ID
+        WHERE f.ID = ? AND pf.Registered = False";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $_GET['fid']);
+$stmt->execute();
+$pend_passengers = $stmt->get_result();
+
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])){
+  $sql = "
+    UPDATE passenger
+    SET account = account + (
+        SELECT fee
+        FROM flights
+        WHERE flights.ID = ?
+    )
+    WHERE id IN (
+        SELECT passenger_id
+        FROM passengerflight
+        WHERE flight_id = ?
+    );";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $fid, $fid);
+$stmt->execute();
+if ($stmt->error) 
+  echo "Error: " . $stmt->error;
+
+}
 ?>
+
 <!DOCTYPE html>
 <html>
 <title>W3.CSS Template</title>
@@ -60,9 +90,12 @@ body, html {
 .w3-bar .w3-button {
   padding: 16px;
 }
+.w3-white{
+  background-color:#000; color:#fff;
+}
 ul { 
     list-style-type: none; 
-    width: 40%;  
+    width: 50%;  
     font-weight: bold;
     margin:auto; margin-bottom:4%;
      height: auto; 
@@ -70,7 +103,6 @@ ul {
 ul li { 
     padding: 10px 0; 
     border-bottom: 1px solid #add8e6; 
-    text-align: left; 
     transition: padding-left 0.3s linear, font-weight 0.2s linear, color 0.3s linear; 
     -webkit-transition: padding-left 0.3s linear, font-weight 0.2s linear, color 0.3s linear; 
     -moz-transition: padding-left 0.3s linear, font-weight 0.2s linear, color 0.3s linear; 
@@ -83,6 +115,25 @@ ul li:first-child {
     padding-left: 20px; 
     color: #add8e6; 
 }
+.flight-info li {
+  display: flex;
+    justify-content: space-between; /* This will place one item at the start and the other at the end */
+    align-items: center;
+    margin-bottom: 5px; /* Spacing between items */
+
+}
+
+.info-key {
+    font-weight: bold;
+    margin-right: 10px; /* Adds space between the key and value */
+    text-align: left;
+}
+
+.info-value {
+    flex-grow: 1;
+    text-align: right;
+}
+
 </style>
 <body>
 
@@ -91,8 +142,11 @@ ul li:first-child {
   <div class="w3-bar w3-white w3-card" id="myNavbar">
     <a href="#home" class="w3-bar-item w3-button w3-wide"><?php echo $logo;  ?></a>
     <div class="w3-right w3-hide-small">
-      <a href="#team" class="w3-bar-item w3-button"><i class="fa fa-user"></i> PROFILE</a>
+    <a href="comphome.php" class="w3-bar-item w3-button"><i class="fa fa-home"></i> HOME</a>
+
+      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i> PROFILE</a>
       <a href="#contact" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> MESSAGES</a>
+
     </div>
 
     <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
@@ -110,33 +164,44 @@ ul li:first-child {
   <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button">CONTACT</a>
 </nav>
 
-<header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
-  <div class="w3-display-left w3-text-white" style="padding:48px">
-    <span class="w3-jumbo w3-hide-small"><?php echo $comname; ?></span><br>
-    <span class="w3-xxlarge w3-hide-large w3-hide-medium"><?php echo $comname; ?></span><br>
-    <span class="w3-large"><?php echo $bio; ?></span>
-    <p><a href="#about" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Add Flight</a></p>
-  </div> 
-  <div class="w3-display-bottomleft w3-text-grey w3-large" style="padding:24px 48px">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-snapchat w3-hover-opacity"></i>
-    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-    <i class="fa fa-linkedin w3-hover-opacity"></i>
-  </div>
-</header>
-<h3 class="w3-center" style="margin-top:5%;">FLIGHTS</h3>
+<h3 class="w3-center" style="margin-top:5%;">FLIGHT</h3>
+<form>
 <ul class="item1">
     <?php
-    if ($result->num_rows > 0) {
-        // Output data of each row
-        while($row = $result->fetch_assoc()) {
-          echo "<li><a href='flightdetails.php?cid=" . urlencode($crow['ID']) . "&fid=" . urlencode($row['ID']) . "'>" . htmlspecialchars($row['ID']) . "</a></li>";
-        }
-    } 
-    ?>
+    $row = $flight->fetch_assoc(); // Fetch the row
+    echo "<li><span class='info-key'>" . htmlspecialchars("ID") . ":</span> <span class='info-value'>" . htmlspecialchars($row['ID']) . "</span></li>";
+    echo "<li><span class='info-key'>" . htmlspecialchars("Name") . ":</span> <span class='info-value'>" . htmlspecialchars($row['name']) . "</span></li>";
+    echo "<li><span class='info-key'> Iternaity:</span> <span class='info-value'>";
+    if ($iternaity->num_rows > 0) {
+      while ($row = $iternaity->fetch_assoc()) {
+          echo  $row['city'] . "&nbsp";
+      }
+    }      
+    echo "</span></li>";
+    echo "<li><span class='info-key'> Registered Passengers:</span> <span class='info-value'>";
+    if ($reg_passengers->num_rows > 0) {
+      echo '<select name="passenger" id="passenger">';
+      while ($row = $result->fetch_assoc()) {
+          echo '<option value="' . htmlspecialchars($row['id']) . '">'
+               . htmlspecialchars($row['name']) . '</option>';
+      }
+      echo '</select>';
+  }
+  echo "</span></li>";
+  echo "<li><span class='info-key'> Pending Passengers:</span> <span class='info-value'>";
+  if ($pend_passengers->num_rows > 0) {
+    echo '<select name="passenger" id="passenger">';
+    while ($row = $result->fetch_assoc()) {
+        echo '<option value="' . htmlspecialchars($row['id']) . '">'
+             . htmlspecialchars($row['name']) . '</option>';
+    }
+    echo '</select>';
+  }
+  echo "</span></li>";
+  ?>
+  <p><input type="submit" value="Cancel Flight" name="submit" class="w3-button w3-padding-large w3-large w3-margin-top w3-hover-opacity-off" style="background-color:black;color:#fff;"></p>
 </ul>
+</form>
 
 <div class="w3-container" style="padding:128px 16px" id="about">
   <h3 class="w3-center">ABOUT THE COMPANY</h3>
