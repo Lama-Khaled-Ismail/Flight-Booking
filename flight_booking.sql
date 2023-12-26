@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 4.9.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Dec 26, 2023 at 01:43 PM
--- Server version: 8.0.28
--- PHP Version: 8.0.26
+-- Host: localhost
+-- Generation Time: Dec 26, 2023 at 06:04 PM
+-- Server version: 8.0.17
+-- PHP Version: 7.3.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -27,9 +28,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `company`
 --
 
-DROP TABLE IF EXISTS `company`;
-CREATE TABLE IF NOT EXISTS `company` (
-  `ID` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `company` (
+  `ID` int(11) NOT NULL,
   `Name` varchar(100) NOT NULL,
   `Bio` text NOT NULL,
   `Address` text NOT NULL,
@@ -37,18 +37,17 @@ CREATE TABLE IF NOT EXISTS `company` (
   `username` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `tel` int NOT NULL,
+  `tel` int(11) NOT NULL,
   `Logo` blob NOT NULL,
-  `Account` int NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `Account` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `company`
 --
 
 INSERT INTO `company` (`ID`, `Name`, `Bio`, `Address`, `Location`, `username`, `password`, `email`, `tel`, `Logo`, `Account`) VALUES
-(1, 'root1', '', '', '', '', 'menna2003', 'ff', 0, '', 0),
+(1, 'root1', 'bio here', '', '', '', 'menna2003', 'ff', 0, '', 0),
 (5, 'company', '', '', '', '', '123456', 'mennaahmed.ma54@gmail.com', 111111111, '', 0),
 (6, 'company', '', '', '', '', '11111', 'mennaahmed.ma54@gmail.com', 111111111, '', 0),
 (7, 'company', '', '', '', '', '12334', 'mennaahmed.ma54@gmail.com', 111111111, '', 0),
@@ -60,21 +59,25 @@ INSERT INTO `company` (`ID`, `Name`, `Bio`, `Address`, `Location`, `username`, `
 -- Table structure for table `flights`
 --
 
-DROP TABLE IF EXISTS `flights`;
-CREATE TABLE IF NOT EXISTS `flights` (
-  `ID` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `flights` (
+  `ID` int(11) NOT NULL,
   `Name` varchar(100) NOT NULL,
   `Completed` tinyint(1) NOT NULL DEFAULT '0',
-  `passengers_no` int NOT NULL,
-  `RegPassangers` int NOT NULL,
-  `PendPassangers` int NOT NULL,
+  `passengers_no` int(11) NOT NULL,
+  `RegPassangers` int(11) NOT NULL,
+  `PendPassangers` int(11) NOT NULL,
   `fees` float NOT NULL,
-  `company_id` int NOT NULL,
+  `company_id` int(11) NOT NULL,
   `start_city` varchar(100) NOT NULL,
-  `end_city` varchar(100) NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `company_id` (`company_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `end_city` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `flights`
+--
+
+INSERT INTO `flights` (`ID`, `Name`, `Completed`, `passengers_no`, `RegPassangers`, `PendPassangers`, `fees`, `company_id`, `start_city`, `end_city`) VALUES
+(3, 'name', 0, 0, 0, 0, 0, 1, '', '');
 
 -- --------------------------------------------------------
 
@@ -82,16 +85,13 @@ CREATE TABLE IF NOT EXISTS `flights` (
 -- Table structure for table `itinerary`
 --
 
-DROP TABLE IF EXISTS `itinerary`;
-CREATE TABLE IF NOT EXISTS `itinerary` (
-  `ID` int NOT NULL AUTO_INCREMENT,
-  `flight_id` int NOT NULL,
+CREATE TABLE `itinerary` (
+  `ID` int(11) NOT NULL,
+  `flight_id` int(11) NOT NULL,
   `city` varchar(100) NOT NULL,
   `start_time` datetime NOT NULL,
-  `end_time` datetime NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `flight_id` (`flight_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `end_time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -99,19 +99,16 @@ CREATE TABLE IF NOT EXISTS `itinerary` (
 -- Table structure for table `passenger`
 --
 
-DROP TABLE IF EXISTS `passenger`;
-CREATE TABLE IF NOT EXISTS `passenger` (
-  `ID` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `passenger` (
+  `ID` int(11) NOT NULL,
   `Name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `tel` int NOT NULL,
+  `tel` int(11) NOT NULL,
   `photo` longblob NOT NULL,
   `passport` longblob NOT NULL,
-  `Account` int NOT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Name` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `Account` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `passenger`
@@ -131,13 +128,78 @@ INSERT INTO `passenger` (`ID`, `Name`, `email`, `password`, `tel`, `photo`, `pas
 -- Table structure for table `passengerflight`
 --
 
-DROP TABLE IF EXISTS `passengerflight`;
-CREATE TABLE IF NOT EXISTS `passengerflight` (
-  `flight_id` int NOT NULL,
-  `passenger_id` int NOT NULL,
-  KEY `flight_id` (`flight_id`),
-  KEY `passenger_id` (`passenger_id`)
+CREATE TABLE `passengerflight` (
+  `flight_id` int(11) NOT NULL,
+  `passenger_id` int(11) NOT NULL,
+  `Registered` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `company`
+--
+ALTER TABLE `company`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `Name` (`Name`);
+
+--
+-- Indexes for table `flights`
+--
+ALTER TABLE `flights`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `company_id` (`company_id`);
+
+--
+-- Indexes for table `itinerary`
+--
+ALTER TABLE `itinerary`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `flight_id` (`flight_id`);
+
+--
+-- Indexes for table `passenger`
+--
+ALTER TABLE `passenger`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `Name` (`Name`);
+
+--
+-- Indexes for table `passengerflight`
+--
+ALTER TABLE `passengerflight`
+  ADD KEY `flight_id` (`flight_id`),
+  ADD KEY `passenger_id` (`passenger_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `company`
+--
+ALTER TABLE `company`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `flights`
+--
+ALTER TABLE `flights`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `itinerary`
+--
+ALTER TABLE `itinerary`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `passenger`
+--
+ALTER TABLE `passenger`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
