@@ -2,7 +2,7 @@
     include('session.php');
     $username = $_SESSION['username'];
      //for testing purposes
-    $username='menna hussein';
+    //$username='menna hussein';
     
    
     if(isset($_POST['submit']))
@@ -91,6 +91,6 @@
 
     }
 
-    //header("Location:passHomehtml.php");
+    header("Location:passHomehtml.php");
 
 ?>

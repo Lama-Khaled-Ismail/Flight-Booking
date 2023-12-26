@@ -12,7 +12,7 @@
 }
 
  $username = $_SESSION['username'];
- $username ='menna hussein';
+ //$username ='menna hussein';
  $sql = "SELECT * FROM passenger WHERE Name='$username'";
  $result = mysqli_query($conn, $sql);
 
@@ -25,7 +25,7 @@
  $tel =$row['tel'];
  $photo =$row['photo'];
  $base64Image = base64_encode($photo);
- $imageMimeType = 'image/jpeg';
+ $imageMimeType = 'image/png';
 
  $id=$row['ID'];
 
