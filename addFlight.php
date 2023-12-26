@@ -91,6 +91,7 @@
     else {
         echo "Form not submitted or submit button not clicked.";
     }
+    header("location: comphome.php");
 
     
 

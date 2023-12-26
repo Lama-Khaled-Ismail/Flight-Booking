@@ -86,7 +86,7 @@
     die("Connection failed: " . mysqli_connect_error());
 }
 $username=$_SESSION['username'];
-$username='menna hussein';
+//$username='menna hussein';
 $sql = "SELECT * FROM passenger WHERE Name ='$username'";
 $result = mysqli_query($conn, $sql);
 

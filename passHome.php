@@ -11,9 +11,9 @@
     die("Connection failed: " . mysqli_connect_error());
 }
 
- //$username = $_SESSION['username'];
- $username ='pass';
- $sql = "SELECT * FROM passenger WHERE Name='pass'";
+ $username = $_SESSION['username'];
+ //$username ='pass';
+ $sql = "SELECT * FROM passenger WHERE Name='$username'";
  $result = mysqli_query($conn, $sql);
 
  if (!$result) {

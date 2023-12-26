@@ -1,4 +1,5 @@
 <?php
+include('session.php');
 $dbname = 'flight_booking';
 $conn = new mysqli('localhost', "root", "", $dbname);
 $sql = "SELECT * FROM company WHERE Name = ?";
@@ -26,7 +27,7 @@ $iternaity = $stmt->get_result();
 
 $sql = "SELECT p.name FROM passenger p JOIN passengerflight pf ON p.ID = pf.passenger_id
         JOIN flights f ON pf.flight_id = f.ID
-        WHERE f.ID = ? AND pf.Registered = True";
+        WHERE f.ID = ? AND pf.Registered = 1";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $_GET['fid']);
 $stmt->execute();
@@ -170,7 +171,7 @@ ul li:first-child {
     <?php
     $row = $flight->fetch_assoc(); // Fetch the row
     echo "<li><span class='info-key'>" . htmlspecialchars("ID") . ":</span> <span class='info-value'>" . htmlspecialchars($row['ID']) . "</span></li>";
-    echo "<li><span class='info-key'>" . htmlspecialchars("Name") . ":</span> <span class='info-value'>" . htmlspecialchars($row['name']) . "</span></li>";
+    echo "<li><span class='info-key'>" . htmlspecialchars("Name") . ":</span> <span class='info-value'>" . htmlspecialchars($row['Name']) . "</span></li>";
     echo "<li><span class='info-key'> Iternaity:</span> <span class='info-value'>";
     if ($iternaity->num_rows > 0) {
       while ($row = $iternaity->fetch_assoc()) {

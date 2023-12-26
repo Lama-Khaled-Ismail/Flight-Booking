@@ -10,11 +10,13 @@
             padding: 0;
             display: flex;
             min-height: 100vh;
+            background: whitesmoke;
         }
 
         #profile {
             width: 20%;
-            background-color: #81a9c7;
+            background-color: #689CC1;
+            
             padding: 20px;
             box-shadow: 0 0 10px #81a9c7;
         }
