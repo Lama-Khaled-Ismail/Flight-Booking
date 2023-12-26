@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $fp = fopen($file["tmp_name"], 'rb');
         $data = fread($fp, filesize($file["tmp_name"]));
         fclose($fp);
-        echo $data;
+        //echo $data;
 
         $address = $_POST['address']; $acc = $_POST['acc'];$loc = $_POST['location'];
 
@@ -39,7 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
             $stmt->bind_param("issi",$acc, $address, $loc, $id);
            // $stmt->send_long_data(4, $blob); 
+           header('Location: comphome.php');
 
+           exit;
 
         $stmt->close();
     }

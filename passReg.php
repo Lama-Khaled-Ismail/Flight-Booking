@@ -41,7 +41,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt->bind_param('ii',$acc,$id);
              $stmt->execute();
              // $stmt->send_long_data(4, $blob); 
+             header('Location: passHomehtml.php');
 
+             exit;
 
         $stmt->close();
     }
