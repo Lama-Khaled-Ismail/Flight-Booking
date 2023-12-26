@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Registration</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: url('airplane-wing') center/cover no-repeat fixed;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            
+        }
+
+        form {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            width:  60%;;
+        }
+
+        h2 {
+            color: #222222; /* White text */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #222222; /* White text */
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f0f0f0; /* Light gray background */
+            color: #333; /* Dark text */
+        }
+
+        button {
+            background-color:rgba(70, 130, 180, 0.8); /* Blue button color */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color:  #007BFF; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <form action="addFlight.php" method="post">
+        <h2>Flight Registration</h2>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="cities">Cities:</label>
+      <div id="citiesContainer">
+        <div class="city">
+          <input type="text" name="city[]" placeholder="City" required>
+          <input type="datetime-local" name="startTime[]" required>
+          <input type="datetime-local" name="endTime[]" required>
+        </div>
+      </div>
+      <button type="button" onclick="addCity()">Add City</button>
+
+        <label for="fees">Fees:</label>
+        <input type="number" id="fees" name="fees" required>
+
+        <label for="passengers">Number of Passengers:</label>
+        <input type="number" id="passengers" name="passengers" required>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+       function addCity() {
+  const citiesContainer = document.getElementById('citiesContainer');
+  const newCityDiv = document.createElement('div');
+  newCityDiv.className = 'city';
+  newCityDiv.innerHTML = `
+    <input type="text" name="city[]" placeholder="City" required>
+    <input type="datetime-local" name="startTime[]" required>
+    <input type="datetime-local" name="endTime[]" required>
+  `;
+  citiesContainer.appendChild(newCityDiv);
+}
+    </script>
+
+</body>
+</html>

@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Dec 25, 2023 at 02:02 PM
--- Server version: 8.0.17
--- PHP Version: 7.3.10
+-- Host: 127.0.0.1:3306
+-- Generation Time: Dec 26, 2023 at 12:01 AM
+-- Server version: 8.0.28
+-- PHP Version: 8.0.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -28,8 +27,9 @@ SET time_zone = "+00:00";
 -- Table structure for table `company`
 --
 
-CREATE TABLE `company` (
-  `ID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `company`;
+CREATE TABLE IF NOT EXISTS `company` (
+  `ID` int NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) NOT NULL,
   `Bio` text NOT NULL,
   `Address` text NOT NULL,
@@ -37,10 +37,11 @@ CREATE TABLE `company` (
   `username` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `tel` int(11) NOT NULL,
+  `tel` int NOT NULL,
   `Logo` blob NOT NULL,
-  `Account` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `Account` int NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `company`
@@ -48,26 +49,10 @@ CREATE TABLE `company` (
 
 INSERT INTO `company` (`ID`, `Name`, `Bio`, `Address`, `Location`, `username`, `password`, `email`, `tel`, `Logo`, `Account`) VALUES
 (1, 'root1', '', '', '', '', 'menna2003', 'ff', 0, '', 0),
+(5, 'company', '', '', '', '', '123456', 'mennaahmed.ma54@gmail.com', 111111111, '', 0),
+(6, 'company', '', '', '', '', '11111', 'mennaahmed.ma54@gmail.com', 111111111, '', 0),
 (7, 'company', '', '', '', '', '12334', 'mennaahmed.ma54@gmail.com', 111111111, '', 0),
-(8, 'company2', 'bio', 'gh', 'hhb', '', '12345', 'mennaahmed.ma54@gmail.com', 111111111, '', 2147483647);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `companyflight`
---
-
-CREATE TABLE `companyflight` (
-  `company_id` int(11) NOT NULL,
-  `flight_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `companyflight`
---
-
-INSERT INTO `companyflight` (`company_id`, `flight_id`) VALUES
-(1, 1);
+(8, 'company2', '', 'gh', 'hhb', '', '12345', 'mennaahmed.ma54@gmail.com', 111111111, '', 2147483647);
 
 -- --------------------------------------------------------
 
@@ -75,21 +60,18 @@ INSERT INTO `companyflight` (`company_id`, `flight_id`) VALUES
 -- Table structure for table `flights`
 --
 
-CREATE TABLE `flights` (
-  `ID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `flights`;
+CREATE TABLE IF NOT EXISTS `flights` (
+  `ID` int NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) NOT NULL,
   `Completed` tinyint(1) NOT NULL DEFAULT '0',
-  `RegPassangers` int(11) NOT NULL,
-  `PendPassangers` int(11) NOT NULL,
-  `fees` float NOT NULL
+  `RegPassangers` int NOT NULL,
+  `PendPassangers` int NOT NULL,
+  `fees` float NOT NULL,
+  `company_id` int NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `company_id` (`company_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `flights`
---
-
-INSERT INTO `flights` (`ID`, `Name`, `Completed`, `RegPassangers`, `PendPassangers`, `fees`) VALUES
-(1, 'flight1', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -97,12 +79,15 @@ INSERT INTO `flights` (`ID`, `Name`, `Completed`, `RegPassangers`, `PendPassange
 -- Table structure for table `itinerary`
 --
 
-CREATE TABLE `itinerary` (
-  `ID` int(11) NOT NULL,
-  `flight_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `itinerary`;
+CREATE TABLE IF NOT EXISTS `itinerary` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `flight_id` int NOT NULL,
   `city` varchar(100) NOT NULL,
   `start_time` datetime NOT NULL,
-  `end_time` datetime NOT NULL
+  `end_time` datetime NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `flight_id` (`flight_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -111,16 +96,19 @@ CREATE TABLE `itinerary` (
 -- Table structure for table `passenger`
 --
 
-CREATE TABLE `passenger` (
-  `ID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `passenger`;
+CREATE TABLE IF NOT EXISTS `passenger` (
+  `ID` int NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `tel` int(11) NOT NULL,
+  `tel` int NOT NULL,
   `photo` longblob NOT NULL,
   `passport` longblob NOT NULL,
-  `Account` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `Account` int NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `Name` (`Name`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `passenger`
@@ -140,94 +128,23 @@ INSERT INTO `passenger` (`ID`, `Name`, `email`, `password`, `tel`, `photo`, `pas
 -- Table structure for table `passengerflight`
 --
 
-CREATE TABLE `passengerflight` (
-  `flight_id` int(11) NOT NULL,
-  `passenger_id` int(11) NOT NULL
+DROP TABLE IF EXISTS `passengerflight`;
+CREATE TABLE IF NOT EXISTS `passengerflight` (
+  `flight_id` int NOT NULL,
+  `passenger_id` int NOT NULL,
+  KEY `flight_id` (`flight_id`),
+  KEY `passenger_id` (`passenger_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `company`
---
-ALTER TABLE `company`
-  ADD PRIMARY KEY (`ID`),
-  ADD UNIQUE KEY `Name` (`Name`);
-
---
--- Indexes for table `companyflight`
---
-ALTER TABLE `companyflight`
-  ADD KEY `company_id` (`company_id`),
-  ADD KEY `flight_id` (`flight_id`);
-
---
--- Indexes for table `flights`
---
-ALTER TABLE `flights`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `itinerary`
---
-ALTER TABLE `itinerary`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `flight_id` (`flight_id`);
-
---
--- Indexes for table `passenger`
---
-ALTER TABLE `passenger`
-  ADD PRIMARY KEY (`ID`),
-  ADD UNIQUE KEY `Name` (`Name`);
-
---
--- Indexes for table `passengerflight`
---
-ALTER TABLE `passengerflight`
-  ADD KEY `flight_id` (`flight_id`),
-  ADD KEY `passenger_id` (`passenger_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `company`
---
-ALTER TABLE `company`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `flights`
---
-ALTER TABLE `flights`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `itinerary`
---
-ALTER TABLE `itinerary`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `passenger`
---
-ALTER TABLE `passenger`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `companyflight`
+-- Constraints for table `flights`
 --
-ALTER TABLE `companyflight`
-  ADD CONSTRAINT `companyflight_ibfk_1` FOREIGN KEY (`flight_id`) REFERENCES `flights` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `companyflight_ibfk_2` FOREIGN KEY (`company_id`) REFERENCES `company` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `flights`
+  ADD CONSTRAINT `flights_ibfk_1` FOREIGN KEY (`company_id`) REFERENCES `company` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `itinerary`

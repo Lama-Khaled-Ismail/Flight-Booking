@@ -2,7 +2,7 @@
  include('session.php');
  $host = 'localhost';
  $user = 'root';
- $pass = 'admin';
+ $pass = '';
  $db = 'flight_booking';
 
  $conn = mysqli_connect($host, $user, $pass, $db);
