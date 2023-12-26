@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+
 $comname = "com";
 $bio = "bio";
 $dbname = 'flight_booking';
@@ -10,23 +11,24 @@ $conn = new mysqli('localhost', "root", "", $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-print_r($_SESSION);
-if (isset($_SESSION['id'])) {
+//print_r($_SESSION); //echo $comname;
+if (isset($_SESSION['username'])) {
   $comname = $_SESSION['username'];
-  echo $_SESSION['username'];
+  //echo $comname;
 }
  $sql = "SELECT * FROM company WHERE Name = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $_SESSION['username']);
 $stmt->execute();
 $result = $stmt->get_result();
-$row = $result->fetch_assoc();
+$crow = $result->fetch_assoc();
 $comname = $_SESSION['username'];
-  // $bio = $row['Bio'];
-//     echo $comname;
-$sql = "SELECT flight_id FROM companyflight WHERE company_id = ?";
+   $bio = $crow['Bio'];
+$logo = $crow['Logo'];
+//   echo $comname;
+$sql = "SELECT ID FROM flights WHERE company_id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $row['ID']);
+$stmt->bind_param("i", $crow['ID']);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -87,7 +89,7 @@ ul li:first-child {
 
 <div class="w3-top">
   <div class="w3-bar w3-white w3-card" id="myNavbar">
-    <a href="#home" class="w3-bar-item w3-button w3-wide">LOGO</a>
+    <a href="#home" class="w3-bar-item w3-button w3-wide"><?php echo $logo;  ?></a>
     <div class="w3-right w3-hide-small">
       <a href="#team" class="w3-bar-item w3-button"><i class="fa fa-user"></i> PROFILE</a>
       <a href="#contact" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> MESSAGES</a>
@@ -113,7 +115,7 @@ ul li:first-child {
     <span class="w3-jumbo w3-hide-small"><?php echo $comname; ?></span><br>
     <span class="w3-xxlarge w3-hide-large w3-hide-medium"><?php echo $comname; ?></span><br>
     <span class="w3-large"><?php echo $bio; ?></span>
-    <p><a href="#about" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Add Flight</a></p>
+    <p><a href="addFlight.html" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Add Flight</a></p>
   </div> 
   <div class="w3-display-bottomleft w3-text-grey w3-large" style="padding:24px 48px">
     <i class="fa fa-facebook-official w3-hover-opacity"></i>
@@ -130,7 +132,7 @@ ul li:first-child {
     if ($result->num_rows > 0) {
         // Output data of each row
         while($row = $result->fetch_assoc()) {
-            echo "<li>" . ($row['flight_id']) . "</li>";
+          echo "<li><a href='flightdetails.php?cid=" . urlencode($crow['ID']) . "&fid=" . urlencode($row['ID']) . "'>" . htmlspecialchars($row['ID']) . "</a></li>";
         }
     } 
     ?>

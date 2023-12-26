@@ -10,11 +10,13 @@
             padding: 0;
             display: flex;
             min-height: 100vh;
+            background: whitesmoke;
         }
 
         #profile {
             width: 20%;
-            background-color: #81a9c7;
+            background-color: #689CC1;
+            
             padding: 20px;
             box-shadow: 0 0 10px #81a9c7;
         }
@@ -72,10 +74,13 @@ cursor: pointer;
     ?>
 
     <div id="profile">
-    <a href="your_profile_link_here" style="text-align: center; display: block;">
-    <h1>Profile</h1>
-    </a>
+    
+    
+
+    
         <center><img src="data:<?php echo $imageMimeType; ?>;base64,<?php echo $base64Image; ?>" alt="Profile Picture" style="max-width: 100%; border-radius: 50%;"></center>
+        <a href="passProfile.php" style="text-align: center; display: block;">
+        <h1>Profile</h1></a>
         <p><strong>Name:</strong> <?php echo $username; ?></p>
         <p><strong>Email:</strong> <?php echo $email; ?></p>
         <p><strong>Tel:</strong><?php echo $tel; ?></p>

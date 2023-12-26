@@ -6,7 +6,7 @@
    
     if(isset($_POST['submit']))
     {
-        var_dump($_POST);
+        
        
         
         if ($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -91,6 +91,7 @@
     else {
         echo "Form not submitted or submit button not clicked.";
     }
+    header("location: comphome.php");
 
     
 
