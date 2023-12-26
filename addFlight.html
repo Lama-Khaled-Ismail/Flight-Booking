@@ -48,18 +48,27 @@
             color: #333; /* Dark text */
         }
 
-        button {
+        .button-like ,button {
             background-color:rgba(70, 130, 180, 0.8); /* Blue button color */
             color: white;
             padding: 10px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            width: 150px;
+            text-align: center;
+            
+        }
+        .button-like{
+            line-height: 1.5;
+            display: block; /* Ensures margin auto works for block-level elements */
+            margin: 0 auto;
         }
 
-        button:hover {
+        .button-like:hover ,button:hover {
             background-color:  #007BFF; /* Darker blue on hover */
         }
+        
     </style>
 </head>
 <body>
@@ -77,6 +86,11 @@
           <input type="datetime-local" name="endTime[]" required>
         </div>
       </div>
+      <div class="city">
+        <input type="text" name="city[]" placeholder="City" required>
+        <input type="datetime-local" name="startTime[]" required>
+        <input type="datetime-local" name="endTime[]" required>
+      </div>
       <button type="button" onclick="addCity()">Add City</button>
 
         <label for="fees">Fees:</label>
@@ -85,7 +99,7 @@
         <label for="passengers">Number of Passengers:</label>
         <input type="number" id="passengers" name="passengers" required>
 
-        <button type="submit">Submit</button>
+        <input type="submit" name="submit" id="submit" value="Submit" class="button-like">
     </form>
 
     <script>

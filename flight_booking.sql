@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 26, 2023 at 12:01 AM
+-- Generation Time: Dec 26, 2023 at 01:43 PM
 -- Server version: 8.0.28
 -- PHP Version: 8.0.26
 
@@ -65,13 +65,16 @@ CREATE TABLE IF NOT EXISTS `flights` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) NOT NULL,
   `Completed` tinyint(1) NOT NULL DEFAULT '0',
+  `passengers_no` int NOT NULL,
   `RegPassangers` int NOT NULL,
   `PendPassangers` int NOT NULL,
   `fees` float NOT NULL,
   `company_id` int NOT NULL,
+  `start_city` varchar(100) NOT NULL,
+  `end_city` varchar(100) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `company_id` (`company_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -88,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `itinerary` (
   `end_time` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `flight_id` (`flight_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 

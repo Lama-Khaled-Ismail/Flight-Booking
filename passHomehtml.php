@@ -14,9 +14,9 @@
 
         #profile {
             width: 20%;
-            background-color: #f4f4f4;
+            background-color: #81a9c7;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px #81a9c7;
         }
         #content {
             flex: 1;
@@ -36,7 +36,7 @@
             margin-bottom: 20px; /* Adjust the margin as needed */
         }
         th, td {
-            border: 1px solid #dddddd;
+            border: 1px  #dddddd;
             text-align: left;
             padding: 8px;
         }
