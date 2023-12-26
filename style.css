@@ -33,8 +33,7 @@ a,
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.76);
-}
+background-image: url("https://www.travelguard.ca/customer-service/travel-resource-centre/tips-for-a-smooth-flight/_jcr_content/root/teaser.coreimg.jpeg/1643062216717/gettyimages-990950150.jpeg");}
 
 .container__child {
   width: 50%;
@@ -48,7 +47,7 @@ a,
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  background: url(http://ultraimg.com/images/spectre-login.jpg);
+  background-image: url("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.expedia.com%2FFlights&psig=AOvVaw1bmNm1waxlx5uUynZlZ2_u&ust=1703708573819000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCKCS55T3rYMDFQAAAAAdAAAAABAD");
   background-repeat: no-repeat;
   background-position: top center;
   background-size: cover;
