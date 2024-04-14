@@ -1,26 +1,31 @@
 <html>
 <body>
 <?php
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $host = 'localhost';
-    $user = "root";
-    $dbname = 'flight_booking';
+include_once("db.php");
+include_once("session.php");
+include_once("encrypt.php");
 
-    $conn = new mysqli($host, $user, "", $dbname);
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    $conn = new mysqli($host, $user, $pass, $dbname);
     if ($conn->connect_error) {
         die('Connection failed: ' . $conn->connect_error);
     }
 
     // Fetching the latest ID
-    $qry = "SELECT ID FROM company ORDER BY ID DESC LIMIT 1";
-    $result = $conn->query($qry);
-    if ($result->num_rows > 0) {
+    $qry = "SELECT ID FROM company where Name = ?";
+    $stmt = $conn->prepare($qry);
+    $stmt->bind_param("s",$_SESSION['username']);
+    $stmt->execute();
+    $stmt->bind_result($id);
+    $stmt->fetch();
+    $stmt->close();
+    if ($id) {
         print_r($_FILES);
+
         if(! isset($_FILES['upload']['name'])){
             echo "notset";
         }
-        $row = $result->fetch_assoc();
-        $id = $row['ID'];
         $file = $_FILES["upload"];
 
         // Read the file
@@ -32,18 +37,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $address = $_POST['address']; $acc = $_POST['acc'];$loc = $_POST['location'];
 
         // Prepare statements to update data
-        $stmt = $conn->prepare("UPDATE company SET Account = ?, Address = ?, Location = ? WHERE ID = ?");
+        $stmt = $conn->prepare("UPDATE company SET Account = ?, Address = ?, Location = ?, Bio=? WHERE ID = ?");
         if (!$stmt) {
             // Prepare failed
             echo "failed";
         } else {
-            $stmt->bind_param("issi",$acc, $address, $loc, $id);
+            $stmt->bind_param("ssssi",encrypt($acc), $address, $loc,$_POST['bio'], $id);
+            $stmt->execute();
+            $stmt->close();
+
            // $stmt->send_long_data(4, $blob); 
            header('Location: comphome.php');
 
            exit;
 
-        $stmt->close();
     }
     
     }

@@ -1,8 +1,8 @@
 <head>
     <script>
-        function showFile() {
+        function showFile(i) {
     var input = document.getElementById('upload');
-    var fileNameDisplay = document.getElementById('file-name-display');
+    var fileNameDisplay = document.getElementById('file-name-display'+i);
     var file = input.files[0];
 
     if (file) {
@@ -12,16 +12,16 @@
     }
 }
 
-function removeFile() {
+function removeFile(i) {
     var input = document.getElementById('upload');
     input.value = ""; // Clear the input
-    showFile(); // Update the display
+    showFile(i); // Update the display
 }
-var fileNameDisplay = document.getElementById('file-name-display');
+var fileNameDisplay = document.getElementById('file-name-display'+i);
     fileNameDisplay.addEventListener('click', removeFile);
 
     // Initial call to set the default state of the file name display
-    showFile();
+    showFile(i);
 
 // Attach an event listener to clear the file when the label is clicked
 
@@ -66,8 +66,8 @@ var fileNameDisplay = document.getElementById('file-name-display');
                         </clipPath>
                         </defs>
                         </svg>
-                    <span id="file-name-display">Upload Your Image</span>
-                    <input type="file" name="upload" id="upload" accept="image/*" onchange="showFile()">
+                    <span id="file-name-display1">Upload Your Image</span>
+                    <input type="file" name="upload" id="upload" accept="image/*" onchange="showFile(1)">
             </label>
           </div>
           <div class="formbold-input-file">
@@ -83,8 +83,8 @@ var fileNameDisplay = document.getElementById('file-name-display');
                     </clipPath>
                     </defs>
                     </svg>
-                <span id="file-name-display">Upload Passport Image</span>
-                <input type="file" name="upload" id="upload" accept="image/*" onchange="showFile()">
+                <span id="file-name-display2">Upload Passport Image</span>
+                <input type="file" name="upload" id="upload" accept="image/*" onchange="showFile(2)">
         </label>
       </div>
           <input type="submit" class="formbold-btn" value="Register">
