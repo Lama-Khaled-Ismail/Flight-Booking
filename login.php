@@ -4,6 +4,8 @@
 //phpinfo( );
 //echo"fff";
 include('session.php');
+include('sanitize.php');
+
 function checkCredentials($conn, $entity, $name, $pass) {
     $sql = "SELECT * FROM $entity WHERE Name=? AND password=?";  
 
@@ -14,6 +16,9 @@ function checkCredentials($conn, $entity, $name, $pass) {
 
     if ($stmt->num_rows > 0) {
         //echo "found $entity<br>";
+
+        // TO AVOID SESSION FIXATION
+        session_regenerate_id(true);
         $_SESSION['username'] = $name;
 
         $stmt->close();
@@ -37,6 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       
       //echo 'Connected successfully<br/>';  
       $name = $_POST['username']; $pass = $_POST['password']; //echo $name; echo $pass;
+
+      
+      // FILTER AND SANITIZE USERNAME AND PASSWORD INPUT
+      // Filter_SANITIZE_STRING IS DECREPATED BUT STILL WORKS
+      $name = sanitize_input($name);
+      $pass = sanitize_input($pass);
+
       if (checkCredentials($conn, 'passenger', $name, $pass)) {
         // Redirect if a passenger is found
         header('Location: passHomehtml.php');
