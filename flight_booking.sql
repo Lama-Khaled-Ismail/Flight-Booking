@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 14, 2024 at 06:07 PM
+-- Generation Time: Apr 15, 2024 at 08:28 PM
 -- Server version: 8.0.17
 -- PHP Version: 7.3.10
 
@@ -78,7 +78,8 @@ CREATE TABLE `flights` (
 --
 
 INSERT INTO `flights` (`ID`, `Name`, `Completed`, `passengers_no`, `RegPassangers`, `PendPassangers`, `fees`, `company_id`, `start_city`, `end_city`) VALUES
-(3, 'name', 0, 0, 0, 0, 0, 1, '', '');
+(3, 'name', 0, 0, 0, 0, 0, 1, '', ''),
+(16, 'F120', 0, 50, 0, 1, 500, 7, 'Cairo', 'Rome');
 
 -- --------------------------------------------------------
 
@@ -93,6 +94,14 @@ CREATE TABLE `itinerary` (
   `start_time` datetime NOT NULL,
   `end_time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `itinerary`
+--
+
+INSERT INTO `itinerary` (`ID`, `flight_id`, `city`, `start_time`, `end_time`) VALUES
+(19, 16, 'Cairo', '2024-04-15 17:07:00', '2024-04-15 21:07:00'),
+(20, 16, 'Rome', '2024-04-15 16:10:00', '2024-04-15 21:11:00');
 
 -- --------------------------------------------------------
 
@@ -125,7 +134,9 @@ INSERT INTO `passenger` (`ID`, `Name`, `email`, `password`, `tel`, `photo`, `pas
 (15, 'name', 'email@yahoo.com', '$2y$10$cMNLf8MlmoIn/UKAf39fPu3qO4mipkEW8lzhh8VOI84iXDy0W/jy.', '2147483647', '', '', '0'),
 (18, 'newnm', 'yahofd@yahoo.com', '$2y$10$v9CqaDJp5eULDYVnsn/v2OkPU5u8qOdHdb4aY/pciezB1hDKZp8r2', '2147483647', '', '', '12345678912'),
 (20, '222', 'yahofd@yahoo.com', '$2y$10$zLi2he5eePvXu0OAY/Gi6OdE/wE6E3XTvNrmGBXTXFyHFC3JO/s4K', '2147483647', '', '', '4VcqfMk/L9p'),
-(21, 'passen', 'jjjjjjjjj@gmail.com', '$2y$10$M.TMim8t7RQX1yhSioIl7u96.W5XqtD5d1YHryqRNNg74ZLwRVXcS', '0123845', '', '', '4VcqfMk/L9p');
+(21, 'passen', 'jjjjjjjjj@gmail.com', '$2y$10$M.TMim8t7RQX1yhSioIl7u96.W5XqtD5d1YHryqRNNg74ZLwRVXcS', '0123845', '', '', '4VcqfMk/L9p'),
+(23, 'lama', 'lama@gmail.com', '$2y$10$ka7NuYpX11ZzxRGxuaveier0s2RkWX9xaLr7qAS1DOIq1y5XtJFZm', '1111111111', '', '', '4VcqfMk/L9p'),
+(25, 'menna', 'menna@gmail.com', '$2y$10$/sJGrTHXUMI/DaeNmRwGGO/bAaoBecn4gQwl4VNGQI59KWaMFJiy.', '12345678', '', '', '4VcqfMk/L9p');
 
 -- --------------------------------------------------------
 
@@ -138,6 +149,13 @@ CREATE TABLE `passengerflight` (
   `passenger_id` int(11) NOT NULL,
   `Registered` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `passengerflight`
+--
+
+INSERT INTO `passengerflight` (`flight_id`, `passenger_id`, `Registered`) VALUES
+(16, 1, 0);
 
 --
 -- Indexes for dumped tables
@@ -192,19 +210,19 @@ ALTER TABLE `company`
 -- AUTO_INCREMENT for table `flights`
 --
 ALTER TABLE `flights`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `itinerary`
 --
 ALTER TABLE `itinerary`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `passenger`
 --
 ALTER TABLE `passenger`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables
