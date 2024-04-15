@@ -5,25 +5,35 @@
 //echo"fff";
 include('session.php');
 include('sanitize.php');
-require_once 'config.php';
+include('decrypt.php');
+require_once ('config.php');
 
 function checkCredentials($conn, $entity, $name, $pass) {
-    $sql = "SELECT * FROM $entity WHERE Name=? AND password=?";  
+    $sql = "SELECT password FROM $entity WHERE Name=? ";  
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $name, $pass);
+    $stmt->bind_param("s", $name);
     $stmt->execute();
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
+        
         //echo "found $entity<br>";
+        $password = null;
+        $stmt->bind_result($password);
+        $stmt->fetch();
 
-        // TO AVOID SESSION FIXATION
-        session_regenerate_id(true);
-        $_SESSION['username'] = $name;
+        
+        // COMPARING WITH THE HASHED PASSWORD IN DB 
+        if(password_verify($pass,$password)){
+            // TO AVOID SESSION FIXATION
+            session_regenerate_id(true);
+            $_SESSION['username'] = $name;
 
-        $stmt->close();
-        return true;
+            $stmt->close();
+            return true;
+        }
+        
     }
 
     $stmt->close();
@@ -61,9 +71,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
      else {
           echo "USER NOT FOUND";
-          echo $name; echo $pass;
+        //echo $name; echo $pass;
 
-          $Cstmt->close();
+          $stmt->close();
           $conn->close();  
       }      
 

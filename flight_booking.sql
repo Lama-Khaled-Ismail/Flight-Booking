@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 15, 2024 at 08:28 PM
+-- Generation Time: Apr 15, 2024 at 09:47 PM
 -- Server version: 8.0.17
 -- PHP Version: 7.3.10
 
@@ -52,7 +52,8 @@ INSERT INTO `company` (`ID`, `Name`, `Bio`, `Address`, `Location`, `username`, `
 (8, 'company2', '', 'gh', 'hhb', '', '12345', 'mennaahmed.ma54@gmail.com', '111111111', '', '2147483647'),
 (9, 'root', '', '', '', '', 'menna2003', 'mennaahmed.ma54@gmail.com', '2147483647', '', '0'),
 (12, 'com', '', '', '', '', 'menna2003', 'mennaahmed.ma54@gmail.com', '2147483647', '', '0'),
-(16, 'flightcomp', 'ffffff', '217 street', '4444', '', '$2y$10$Og8sZmyWdAgmnTu2FkkJTeE3R2mLsN6.ClCIZUHPgnCyLgIhRDFl.', 'yahofd@yahoo.com', '11111111111', '', '4VcqfMk/L9p');
+(16, 'flightcomp', 'ffffff', '217 street', '4444', '', '$2y$10$Og8sZmyWdAgmnTu2FkkJTeE3R2mLsN6.ClCIZUHPgnCyLgIhRDFl.', 'yahofd@yahoo.com', '11111111111', '', '4VcqfMk/L9p'),
+(17, 'newcomp', 'bio', '22222222', 'Cairo', '', '$2y$10$BJCKIfgVX.szq/Siph6iu.uVSeaWYaRkreYH1EAfJRqgNWhCIlpg2', 'newcomp@gmail.com', '0123845', '', '4VcqfMk/L9p');
 
 -- --------------------------------------------------------
 
@@ -136,7 +137,8 @@ INSERT INTO `passenger` (`ID`, `Name`, `email`, `password`, `tel`, `photo`, `pas
 (20, '222', 'yahofd@yahoo.com', '$2y$10$zLi2he5eePvXu0OAY/Gi6OdE/wE6E3XTvNrmGBXTXFyHFC3JO/s4K', '2147483647', '', '', '4VcqfMk/L9p'),
 (21, 'passen', 'jjjjjjjjj@gmail.com', '$2y$10$M.TMim8t7RQX1yhSioIl7u96.W5XqtD5d1YHryqRNNg74ZLwRVXcS', '0123845', '', '', '4VcqfMk/L9p'),
 (23, 'lama', 'lama@gmail.com', '$2y$10$ka7NuYpX11ZzxRGxuaveier0s2RkWX9xaLr7qAS1DOIq1y5XtJFZm', '1111111111', '', '', '4VcqfMk/L9p'),
-(25, 'menna', 'menna@gmail.com', '$2y$10$/sJGrTHXUMI/DaeNmRwGGO/bAaoBecn4gQwl4VNGQI59KWaMFJiy.', '12345678', '', '', '4VcqfMk/L9p');
+(25, 'menna', 'menna@gmail.com', '$2y$10$/sJGrTHXUMI/DaeNmRwGGO/bAaoBecn4gQwl4VNGQI59KWaMFJiy.', '12345678', '', '', '4VcqfMk/L9p'),
+(26, 'mennahg', 'mennaahmed.ma54@gmail.com', '$2y$10$9msz1mlTKI8M.2zJ/Zthi.ieJSxrkxNpZm3kHOfIbCMfcfhFrHxT.', '0123845', '', '', '4VcqfMk/L9p');
 
 -- --------------------------------------------------------
 
@@ -204,7 +206,7 @@ ALTER TABLE `passengerflight`
 -- AUTO_INCREMENT for table `company`
 --
 ALTER TABLE `company`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `flights`
@@ -222,7 +224,7 @@ ALTER TABLE `itinerary`
 -- AUTO_INCREMENT for table `passenger`
 --
 ALTER TABLE `passenger`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Constraints for dumped tables
