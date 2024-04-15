@@ -5,6 +5,7 @@
 //echo"fff";
 include('session.php');
 include('sanitize.php');
+require_once 'config.php';
 
 function checkCredentials($conn, $entity, $name, $pass) {
     $sql = "SELECT * FROM $entity WHERE Name=? AND password=?";  
@@ -31,9 +32,9 @@ function checkCredentials($conn, $entity, $name, $pass) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = isset($_POST["username"]) ? $_POST["username"] : 'Not set';
-    $host = 'localhost';  $user ='root';   $dbname = 'flight_booking';  
+     
 
-    $conn = mysqli_connect($host, $user,"",$dbname);  
+    $conn = mysqli_connect(DB_HOST, DB_USERNAME,DB_PASSWORD,DB_NAME);  
     if(!$conn){  
 
         die('Could not connect: '.mysqli_connect_error());  
