@@ -1,11 +1,8 @@
 <?php
  include('session.php');
- $host = 'localhost';
- $user = 'root';
- $pass = '';
- $db = 'flight_booking';
+include_once('db.php');
 
- $conn = mysqli_connect($host, $user, $pass, $db);
+ $conn = mysqli_connect($host, $user, $pass, $dbname);
 
  if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -13,14 +10,17 @@
 
  $username = $_SESSION['username'];
  //$username ='pass';
- $sql = "SELECT * FROM passenger WHERE Name='$username'";
- $result = mysqli_query($conn, $sql);
-
+ $sql = "SELECT * FROM passenger WHERE Name=?";
+ $stmt = $conn->prepare($sql);
+ $stmt->bind_param( "s", $username);
+ $stmt->execute();
+ $result = $stmt->get_result();
+ 
  if (!$result) {
     die("Query failed: " . mysqli_error($conn));
 }
 
- $row = mysqli_fetch_assoc($result);
+ $row =$result->fetch_assoc();
  $email =$row['email'];
  $tel =$row['tel'];
  $photo =$row['photo'];
@@ -28,21 +28,29 @@
  $imageMimeType = 'image/png';
  $id=$row['ID'];
 
- $sql ="SELECT * FROM passengerflight WHERE passenger_id=$id";
- $result = mysqli_query($conn, $sql);
+ $sql ="SELECT * FROM passengerflight WHERE passenger_id=?";
+ $stmt = $conn->prepare($sql);
+ $stmt->bind_param( "i", $id);
+ $stmt->execute();
+ $result = $stmt->get_result();
+
  if (!$result) {
     die("Query failed: " . mysqli_error($conn));
 }
-$row = mysqli_fetch_assoc($result);
+
 $flightArray = array(); 
-while( $row = mysqli_fetch_assoc($result)){
+while( $row = $result->fetch_assoc()){
     $flight_id=$row['flight_id'];
-    $sql_flight="SELECT * FROM flights WHERE Completed=0 AND ID =$flight_id";
-    $result_flight=mysqli_query($conn, $sql_flight);
+    $sql_flight="SELECT * FROM flights WHERE Completed=0 AND ID =?";
+    $stmt = $conn->prepare($sql_flight);
+    $stmt->bind_param( "i", $flight_id);
+    $stmt->execute();
+    $result_flight = $stmt->get_result();
+   
     if (!$result_flight) {
         die("Query failed: " . mysqli_error($conn));
     }
-    $row_flight = mysqli_fetch_assoc($result_flight);
+    $row_flight =  $result_flight->fetch_assoc();
     $flightArray[] = $row_flight;
 }
 

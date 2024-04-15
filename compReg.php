@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->fetch();
     $stmt->close();
     if ($id) {
-        print_r($_FILES);
+        //print_r($_FILES);
 
         if(! isset($_FILES['upload']['name'])){
             echo "notset";
@@ -35,6 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         //echo $data;
 
         $address = $_POST['address']; $acc = $_POST['acc'];$loc = $_POST['location'];
+
+        if(!isValidNumber($acc)){
+            echo "Not valid Account number must be of 11 digits\n";
+            exit;
+        }
 
         // Prepare statements to update data
         $stmt = $conn->prepare("UPDATE company SET Account = ?, Address = ?, Location = ?, Bio=? WHERE ID = ?");
@@ -57,6 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $conn->close();
 } else {
 }
+function isValidNumber($Number) {
+    return preg_match("/^[0-9]+$/", $Number) && strlen($Number) ==11;
+}
+
 ?>
 </body>
 </html>

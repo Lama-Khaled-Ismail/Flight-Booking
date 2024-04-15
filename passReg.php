@@ -35,6 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
            // echo $_POST['acc'];
             $acc = $_POST['acc'];
+            if(!isValidNumber($acc)){
+                echo "Not valid Account number must be of 11 digits\n";
+                exit;
+            }
+
             $stmt->bind_param('si',encrypt($acc),$id);
              $stmt->execute();
              // $stmt->send_long_data(4, $blob); 
@@ -51,6 +56,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $conn->close();
 } else {
 }
+
+function isValidNumber($Number) {
+    return preg_match("/^[0-9]+$/", $Number) && strlen($Number) ==11;
+}
+
 ?>
 </body>
 </html>

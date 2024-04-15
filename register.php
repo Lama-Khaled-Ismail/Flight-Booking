@@ -25,7 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $tel = isset($_POST['tel']) ? $_POST['tel'] : null;
     
       if (!($name && $email && $pass && $tel && isValidPhoneNumber($tel))){
-        echo $name," " ,$email," ",$pass," ",$tel;
+        echo "Invalid Input ". $name," " ,$email," ",$pass," ",$tel;
+       
         exit;
       }
 
@@ -65,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 }
 function isValidPhoneNumber($phoneNumber) {
-    return preg_match("/^[0-9 ()-]+$/", $phoneNumber);
+    return preg_match("/^[0-9]+$/", $phoneNumber) && strlen($phoneNumber) <=11;
 }
 
 function validateAndSanitize($input) {

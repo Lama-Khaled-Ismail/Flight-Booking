@@ -78,12 +78,12 @@ cursor: pointer;
     
 
     
-        <center><img src="data:<?php echo $imageMimeType; ?>;base64,<?php echo $base64Image; ?>" alt="Profile Picture" style="max-width: 100%; border-radius: 50%;"></center>
+        <center><img src="data:<?php echo htmlspecialchars($imageMimeType); ?>;base64,<?php echo htmlspecialchars($base64Image); ?>" alt="Profile Picture" style="max-width: 100%; border-radius: 50%;"></center>
         <a href="passProfile.php" style="text-align: center; display: block;">
         <h1>Profile</h1></a>
-        <p><strong>Name:</strong> <?php echo $username; ?></p>
-        <p><strong>Email:</strong> <?php echo $email; ?></p>
-        <p><strong>Tel:</strong><?php echo $tel; ?></p>
+        <p><strong>Name:</strong> <?php echo htmlspecialchars($username); ?></p>
+        <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
+        <p><strong>Tel:</strong><?php echo htmlspecialchars($tel); ?></p>
         
     </div>
     <div id="content">
@@ -100,10 +100,10 @@ cursor: pointer;
         if(isset($flightArray)){
             foreach ($flightArray as $flight) {
                 echo "<tr>
-                        <td>{$flight['ID']}</td>
-                        <td>{$flight['Name']}</td>
-                        <td>{$flight['fees']}</td>
-                      </tr>";
+                         <td>" . htmlspecialchars($flight['ID']) . "</td>
+                         <td>" . htmlspecialchars($flight['Name']) . "</td>
+                         <td>" . htmlspecialchars($flight['fees']) . "</td>
+                    </tr>";
             }
         }
         
@@ -122,10 +122,10 @@ cursor: pointer;
         // Loop over the array and create a table row for each flight
         foreach ($flightArray as $flight) {
             echo "<tr>
-                    <td>{$flight['ID']}</td>
-                    <td>{$flight['Name']}</td>
-                    <td>{$flight['fees']}</td>
-                  </tr>";
+            <td>" . htmlspecialchars($flight['ID']) . "</td>
+            <td>" . htmlspecialchars($flight['Name']) . "</td>
+            <td>" . htmlspecialchars($flight['fees']) . "</td>
+     </tr>";
         }
         ?>
 
