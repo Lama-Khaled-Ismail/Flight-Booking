@@ -80,7 +80,7 @@
         $stmt->execute();
 
         if ($stmt->errno) {
-            echo "Query failed: " . $stmt->error;
+            die("Query failed: " . $stmt->error);
         } 
 
         $stmt -> close();
