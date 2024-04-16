@@ -5,13 +5,13 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include_once('db.php');
+require_once ('config.php');
 include_once("session.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = isset($_POST["username"]) ? $_POST["username"] : 'Not set';
 
-    $conn = mysqli_connect($host, $user,$pass,$dbname);  
+    $conn = mysqli_connect(DB_HOST, DB_USERNAME,DB_PASSWORD,DB_NAME);  
     if(!$conn){  
         echo "FSILED";
         die('Could not connect: '.mysqli_connect_error());  

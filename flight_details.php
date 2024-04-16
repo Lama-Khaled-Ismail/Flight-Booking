@@ -1,12 +1,17 @@
 <?php
 // Assuming you have established a database connection
-$servername = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "flight_booking";
+require_once("config.php");
+include_once("session.php");
+include_once("decrypt.php");
+
+if(!isset($_GET['source']) || decrypt($_GET['source']) !== 'searchFlight_display') {
+        echo "Can't access flight details page without inputting submitting form";exit;
+}
+
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = mysqli_connect(DB_HOST, DB_USERNAME,DB_PASSWORD,DB_NAME);  
+
 
 // Check connection
 if ($conn->connect_error) {

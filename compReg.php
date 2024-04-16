@@ -1,13 +1,13 @@
 <html>
 <body>
 <?php
-include_once("db.php");
+require_once("config.php");
 include_once("session.php");
 include_once("encrypt.php");
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $conn = new mysqli($host, $user, $pass, $dbname);
+    $conn = mysqli_connect(DB_HOST, DB_USERNAME,DB_PASSWORD,DB_NAME);  
     if ($conn->connect_error) {
         die('Connection failed: ' . $conn->connect_error);
     }

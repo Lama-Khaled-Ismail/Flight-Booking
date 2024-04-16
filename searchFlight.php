@@ -74,12 +74,19 @@
 
     <?php
         // Database connection
-        $servername = "127.0.0.1";
-        $username = "root";
-        $password = "";
-        $dbname = "flight_booking";
+        require_once("config.php");
+        include_once("session.php");
+        include_once("encrypt.php");
+        
+        
+        if(!isset($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'] !== 'http://localhost/flight-booking/passHomehtml.php') {
+            echo "<h1 style='color:black'>You have not logged in yet </h1>";
+            exit;
+        }
+        
 
-        $conn = new mysqli($servername, $username, $password, $dbname);
+
+        $conn = mysqli_connect(DB_HOST, DB_USERNAME,DB_PASSWORD,DB_NAME);  
 
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error . "<br>");
@@ -102,13 +109,14 @@
 
     <form action="searchFlight_display.php" method="get">
         <h2>Flight Search</h2>
+        <input type="hidden" name="source" value="<?php echo urlencode(encrypt("searchFlight"));?>">
 
         <label for="from">From:</label>
         <select id="from" name="from" required>
             <?php
                 // the from cities
                 foreach (array_unique($cities) as $city) {
-                    echo "<option value='$city'>$city</option>";
+                    echo "<option value=".htmlspecialchars($city).'>'.htmlspecialchars($city).'</option>';
                 }
             ?>
         </select>
@@ -118,12 +126,12 @@
             <?php
                 // the to cities
                 foreach (array_unique($cities) as $city) {
-                    echo "<option value='$city'>$city</option>";
+                    echo "<option value=".htmlspecialchars($city).'>'.htmlspecialchars($city).'</option>';
                 }
             ?>
         </select>
 
-        <button type="submit">Search Flights</button>
+        <button type="submit" name="search_flights">Search Flights</button>
     </form>
 
 </body>

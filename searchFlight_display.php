@@ -1,12 +1,23 @@
 <?php
 // Assuming you have established a database connection
-$servername = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "flight_booking";
+require_once("config.php");
+include_once("session.php");
+include_once("encrypt.php");
+include_once("decrypt.php");
+
+
+if( !isset($_GET['source']) || decrypt($_GET['source']) !== "searchFlight" ){
+    echo "Please submit form first"; exit;
+}
+if(!isset($_GET['from']) || !isset($_GET['to'])){
+    echo "Please enter your source and destinations"; exit;
+}
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = mysqli_connect(DB_HOST, DB_USERNAME,DB_PASSWORD,DB_NAME);  
+
+
+
 
 // Check connection
 if ($conn->connect_error) {
@@ -21,9 +32,11 @@ $to = $_GET['to'];
 $sql = "SELECT f.*, c.Name AS companyName
         FROM flights f
         JOIN company c ON f.company_id = c.ID
-        WHERE f.start_city = '$from' AND f.end_city = '$to'";
-
-$result = $conn->query($sql);
+        WHERE f.start_city = ? AND f.end_city = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ss", $from,$to);
+$stmt->execute();
+$result = $stmt->get_result();
 
 // Check for SQL errors
 if (!$result) {
@@ -100,16 +113,16 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo '<tr class="table-row">';
         echo '<td class="flight-info">';
-        echo "<strong>Flight ID:</strong> " . $row["ID"] . "<br>";
-        echo "<strong>Flight Name:</strong> " . $row["Name"] . "<br>";
-        echo "<strong>Company Name:</strong> " . $row["companyName"] . "<br>";
-        echo "<strong>Start City:</strong> " . $row["start_city"] . "<br>";
-        echo "<strong>End City:</strong> " . $row["end_city"] . "<br>";
+        echo "<strong>Flight ID:</strong> " . (htmlspecialchars($row["ID"])) . "<br>";
+        echo "<strong>Flight Name:</strong> " . htmlspecialchars($row["Name"]) . "<br>";
+        echo "<strong>Company Name:</strong> " . htmlspecialchars($row["companyName"]) . "<br>";
+        echo "<strong>Start City:</strong> " . htmlspecialchars($row["start_city"]) . "<br>";
+        echo "<strong>End City:</strong> " . htmlspecialchars($row["end_city"]) . "<br>";
         echo '</td>';
 
         // Add the "View Details" button
         echo '<td class="details-button">';
-        echo '<a href="flight_details.php?id=' . $row["ID"] . '">View Details</a>';
+        echo '<a href="flight_details.php?id=' . htmlspecialchars($row["ID"]) . '&source=' . urlencode(encrypt(htmlspecialchars("searchFlight_display"))) . '">View Details</a>';
         echo '</td>';
         echo '</tr>';
     }

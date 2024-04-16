@@ -1,8 +1,8 @@
 <?php
 include('session.php');
-include_once("db.php");
+require_once("config.php");
 
-$conn = mysqli_connect($host, $user, $pass, $dbname);
+$conn = mysqli_connect(DB_HOST, DB_USERNAME,DB_PASSWORD,DB_NAME);  
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
