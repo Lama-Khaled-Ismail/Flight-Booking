@@ -1,12 +1,18 @@
 <?php
 // Assuming you have established a database connection
-$servername = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "flight_booking";
+
+require_once("config.php");
+include_once("session.php");
+include_once("encrypt.php");
+include_once("decrypt.php");
+
+
+if ($_SERVER['REQUEST_METHOD'] !== "POST" || !isset($_POST['message'])) {
+    echo("Choose flight first before messaging"); exit;
+}
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = mysqli_connect(DB_HOST, DB_USERNAME,DB_PASSWORD,DB_NAME);  
 
 // Check connection
 if ($conn->connect_error) {
@@ -14,15 +20,18 @@ if ($conn->connect_error) {
 }
 
 // Get the flight ID from the URL
-$flightID = $_GET['flight_id'];
+$flightID = $_POST['flight_id'];
 
 // Fetch company details based on the flight ID
 $companyQuery = "SELECT c.Name AS companyName
                  FROM flights f
                  JOIN company c ON f.company_id = c.ID
-                 WHERE f.ID = '$flightID'";
+                 WHERE f.ID = ?";
 
-$companyResult = $conn->query($companyQuery);
+$stmt = $conn->prepare($companyQuery);
+$stmt->bind_param("i", $flightID);
+$stmt->execute();
+$companyResult = $stmt->get_result();
 
 // Check for SQL errors
 if (!$companyResult) {
@@ -90,7 +99,7 @@ if ($companyResult->num_rows > 0) {
     $row = $companyResult->fetch_assoc();
     $companyName = $row["companyName"];
     echo '<form class="message-form" action="process_message.php" method="post">';
-    echo '<h2>Send a Message to ' . $companyName . '</h2>';
+    echo '<h2>Send a Message to ' . htmlspecialchars($companyName) . '</h2>';
     echo '<input type="hidden" name="flight_id" value="' . $flightID . '">';
     echo '<label for="message">Your Message:</label>';
     echo '<textarea id="message" name="message" rows="4" required></textarea>';

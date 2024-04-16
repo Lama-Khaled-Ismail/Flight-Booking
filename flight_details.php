@@ -3,6 +3,7 @@
 require_once("config.php");
 include_once("session.php");
 include_once("decrypt.php");
+include_once("encrypt.php");
 
 if(!isset($_GET['source']) || decrypt($_GET['source']) !== 'searchFlight_display') {
         echo "Can't access flight details page without inputting submitting form";exit;
@@ -25,16 +26,23 @@ $flightID = $_GET['id'];
 $flightQuery = "SELECT f.*, c.Name AS companyName
                 FROM flights f
                 JOIN company c ON f.company_id = c.ID
-                WHERE f.ID = '$flightID'";
+                WHERE f.ID = ?";
+$stmt = $conn->prepare($flightQuery);
+$stmt->bind_param("i", $flightID);
+$stmt->execute();
 
-$flightResult = $conn->query($flightQuery);
+$flightResult =  $stmt->get_result();
 
 // SQL query to fetch itinerary details
 $itineraryQuery = "SELECT i.*
                    FROM itinerary i
-                   WHERE i.flight_id = '$flightID'";
+                   WHERE i.flight_id = ?";
 
-$itineraryResult = $conn->query($itineraryQuery);
+$stmt = $conn->prepare($itineraryQuery);
+$stmt->bind_param("i", $flightID);
+$stmt->execute();
+
+$itineraryResult = $stmt->get_result();
 
 // Check for SQL errors
 if (!$flightResult || !$itineraryResult) {
@@ -128,11 +136,11 @@ if ($flightResult->num_rows > 0) {
     echo '<tr><td>';
     while ($row = $flightResult->fetch_assoc()) {
         echo '<div class="flight-details">';
-        echo "<strong>Flight ID:</strong> " . $row["ID"] . "<br>";
-        echo "<strong>Flight Name:</strong> " . $row["Name"] . "<br>";
-        echo "<strong>Company Name:</strong> " . $row["companyName"] . "<br>";
-        echo "<strong>Start City:</strong> " . $row["start_city"] . "<br>";
-        echo "<strong>End City:</strong> " . $row["end_city"] . "<br>";
+        echo "<strong>Flight ID:</strong> " . htmlspecialchars($row["ID"]) . "<br>";
+        echo "<strong>Flight Name:</strong> " . htmlspecialchars($row["Name"]) . "<br>";
+        echo "<strong>Company Name:</strong> " . htmlspecialchars($row["companyName"]) . "<br>";
+        echo "<strong>Start City:</strong> " . htmlspecialchars($row["start_city"]) . "<br>";
+        echo "<strong>End City:</strong> " . htmlspecialchars($row["end_city"]) . "<br>";
         echo '</div>';
     }
     echo '</td></tr>';
@@ -148,9 +156,9 @@ if ($flightResult->num_rows > 0) {
 
         while ($itineraryRow = $itineraryResult->fetch_assoc()) {
             echo '<tr>';
-            echo '<td>' . $itineraryRow["city"] . '</td>';
-            echo '<td>' . $itineraryRow["start_time"] . '</td>';
-            echo '<td>' . $itineraryRow["end_time"] . '</td>';
+            echo '<td>' . htmlspecialchars($itineraryRow["city"]) . '</td>';
+            echo '<td>' . htmlspecialchars($itineraryRow["start_time"]) . '</td>';
+            echo '<td>' . htmlspecialchars($itineraryRow["end_time"]) . '</td>';
             echo '</tr>';
         }
 
@@ -159,16 +167,30 @@ if ($flightResult->num_rows > 0) {
         
         // Payment options
         echo '<tr><td>';
+        $source = urlencode(encrypt("flight_details"));
+
         echo '<div class="payment-options">';
-        echo '<a href="credit_card_payment.php?flight_id=' . $flightID . '" class="payment-button">Pay from Credit Card</a>';
-        echo '<a href="cash_payment.php?flight_id=' . $flightID . '" class="payment-button">Pay with Cash</a>';
+        echo '<form action="credit_card_payment.php" method="post">';
+        echo '<input type="hidden" name="flight_id" value="' . $flightID . '">';
+
+        echo '<button type="submit" class="payment-button" name="pay_with_card">Pay from Credit Card</button>';
+        echo '</form>';
+        
+        echo '<form action="cash_payment.php" method="post">';
+        echo '<input type="hidden" name="flight_id" value="' . $flightID . '">';
+        echo '<button type="submit" class="payment-button" name="pay_with_cash">Pay with Cash</button>';
+        echo '</form>';
+    
         echo '</div>';
         echo '</td></tr>';
         
         // Message button
         echo '<tr><td>';
         echo '<div class="payment-options">';
-        echo '<a href="message.php?flight_id=' . $flightID . '" class="message-button">Message the Company</a>';
+        echo '<form action="message.php" method="post">';
+        echo '<input type="hidden" name="flight_id" value="' . $flightID . '">';
+        echo '<button type="submit" class="message-button" name="message">Message the Company</a>';
+        echo "</form>";
         echo '</div>';
         echo '</td></tr>';
         echo '</table>';
