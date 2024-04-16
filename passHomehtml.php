@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,7 +86,13 @@ cursor: pointer;
         <p><strong>Name:</strong> <?php echo htmlspecialchars($username); ?></p>
         <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
         <p><strong>Tel:</strong><?php echo htmlspecialchars($tel); ?></p>
-        
+        <button onclick="redirectTologin()" name="logout" style="margin-top: 60px; vertical-align: middle;">Logout</button>
+        <script>
+            function redirectTologin() {
+                // Replace 'targetPage.html' with the URL of the page you want to redirect to
+                window.location.href = 'logout.php';
+            }
+        </script>
     </div>
     <div id="content">
         <h2>Past Flights<h2>
@@ -134,6 +142,8 @@ cursor: pointer;
 
     <div class="search-container">
     <button onclick="redirectToPage()">Search Flights</button>
+    
+
 
 <script>
   function redirectToPage() {
@@ -142,6 +152,7 @@ cursor: pointer;
   }
 </script>
     </div>
+    
 
    
     
