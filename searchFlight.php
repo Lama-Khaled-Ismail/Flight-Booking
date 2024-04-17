@@ -79,7 +79,7 @@
         include_once("encrypt.php");
         
         
-        if(!isset($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'] !== 'http://localhost/flight-booking/passHomehtml.php') {
+        if($_SERVER['REQUEST_METHOD'] !== "GET" || !isset($_GET['search_flights']) ) {
             echo "<h1 style='color:black'>You have not logged in yet </h1>";
             exit;
         }

@@ -141,16 +141,17 @@ cursor: pointer;
     </div>
 
     <div class="search-container">
-    <button onclick="redirectToPage()">Search Flights</button>
-    
+    <form action="searchFlight.php" method="GET">
+    <button type="submit" name="search_flights">Search Flights</button>
+    </form>
 
 
-<script>
+<!-- <script>
   function redirectToPage() {
     // Replace 'targetPage.html' with the URL of the page you want to redirect to
     window.location.href = 'searchFlight.php';
   }
-</script>
+</script> -->
     </div>
     
 
