@@ -74,13 +74,11 @@
 
 <?php 
 include("session.php");
+require_once("config.php");
 
-$host = 'localhost';
-$user = 'root';
-$pass = '';
-$db = 'flight_booking';
 
-$conn = mysqli_connect($host, $user, $pass, $db);
+
+$conn = mysqli_connect(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -88,39 +86,65 @@ if (!$conn) {
 
 $username = $_SESSION['username'];
 
-// Fetch company details based on the username
-$sql = "SELECT * FROM company WHERE Name ='$username'";
-$result = mysqli_query($conn, $sql);
 
-if (!$result) {
-   die("Query failed: " . mysqli_error($conn));
+//ESCAPE
+$username =mysqli_real_escape_string($conn,$username);
+
+//PREPARE STATMENT
+$sql = "SELECT Name, email, tel, Logo FROM company WHERE Name = ?";
+
+
+$stmt = mysqli_prepare($conn, $sql);
+
+if($stmt){
+    // Bind the parameter
+    mysqli_stmt_bind_param($stmt, "s", $username);
+
+    // Execute the statement
+    mysqli_stmt_execute($stmt);
+
+    // Bind the result
+    mysqli_stmt_bind_result($stmt, $cname, $cemail, $ctel, $cphoto);
+
+     // Fetch the result
+     mysqli_stmt_fetch($stmt);
+
+    // Fetch the result
+    mysqli_stmt_fetch($stmt);
+
+    // Close the statement
+    mysqli_stmt_close($stmt);
+
+    $base64Image_1 = base64_encode($cphoto);
+    $imageMimeType = 'image/jpeg';
+
+} else {
+    // Handle error
+    echo "Error: " . mysqli_error($conn);
 }
 
-$row = mysqli_fetch_assoc($result);
-$cemail = $row['email'];
-$ctel = $row['tel'];
-$cphoto = $row['Logo'];
-$cpassword = $row['password'];
-$base64Image_1 = base64_encode($cphoto);
-$imageMimeType = 'image/jpeg';
+
+
+
 
 ?>
 
+<!--FIlTER OUTPUT -->
 <form action="updateComp.php" method="post">
     <h2>Edit Profile</h2>
     <!-- Name (Assuming 'Name' is the username) -->
     <label for="name">Name:</label>
-    <input type="text" id="name" name="name" value="<?php echo $username; ?>" required>
+    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($username); ?>" required>
     <br>
 
     <!-- Email -->
     <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="<?php echo $cemail; ?>" required>
+    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($cemail); ?>" required>
     <br>
 
     <!-- Password -->
     <label for="password">Password:</label>
-    <input type="password" id="password" name="password" value="<?php echo $cpassword; ?>" >
+    <input type="password" id="password" name="password" >
     <br>
 
     <!-- Image -->

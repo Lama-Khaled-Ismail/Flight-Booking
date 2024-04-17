@@ -75,34 +75,52 @@
 
 <?php 
  include("session.php");
- $host = 'localhost';
- $user = 'root';
- $pass = '';
- $db = 'flight_booking';
+ require_once("config.php");
+ 
 
- $conn = mysqli_connect($host, $user, $pass, $db);
+ $conn = mysqli_connect(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
  if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 $username=$_SESSION['username'];
-//$username='menna hussein';
-$sql = "SELECT * FROM passenger WHERE Name ='$username'";
-$result = mysqli_query($conn, $sql);
 
-if (!$result) {
-   die("Query failed: " . mysqli_error($conn));
+//ESCAPE
+$username =mysqli_real_escape_string($conn,$username);
+
+//PREPARE STATMENT
+$sql = "SELECT Name, email, tel, photo, passport FROM passenger WHERE Name = ?";
+
+$stmt = mysqli_prepare($conn, $sql);
+
+if($stmt){
+    // Bind the parameter
+    mysqli_stmt_bind_param($stmt, "s", $username);
+
+    // Execute the statement
+    mysqli_stmt_execute($stmt);
+
+    // Bind the result
+    mysqli_stmt_bind_result($stmt, $pname, $pemail, $ptel, $pphoto, $ppassport);
+
+     // Fetch the result
+     mysqli_stmt_fetch($stmt);
+
+    // Fetch the result
+    mysqli_stmt_fetch($stmt);
+
+    // Close the statement
+    mysqli_stmt_close($stmt);
+
+    $base64Image_1 = base64_encode($pphoto);
+    $base64Image_2 = base64_encode($ppassport);
+    $imageMimeType = 'image/jpeg';
+
+} else {
+    // Handle error
+    echo "Error: " . mysqli_error($conn);
 }
 
-$row = mysqli_fetch_assoc($result);
-$pemail =$row['email'];
-$ptel =$row['tel'];
-$pphoto =$row['photo'];
-$ppassword=$row['password'];
-$ppassport=$row['passport'];
-$base64Image_1 = base64_encode($pphoto);
-$base64Image_2 = base64_encode($ppassport);
-$imageMimeType = 'image/jpeg';
 
 ?>
 
@@ -111,17 +129,17 @@ $imageMimeType = 'image/jpeg';
     <h2>Edit Profile</h2>
     <!-- Name -->
     <label for="name">Name:</label>
-    <input type="text" id="name" name="name" value="<?php echo $username; ?>"required>
+    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($username); ?>"required>
     <br>
 
     <!-- Email -->
     <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="<?php echo $pemail; ?>" required>
+    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($pemail); ?>" required>
     <br>
 
     <!-- Email -->
     <label for="password">Password:</label>
-    <input type="password" id="password" name="password" value="<?php echo $ppassword; ?>" >
+    <input type="password" id="password" name="password"  >
     <br>
 
     <!-- Image -->
@@ -137,7 +155,7 @@ $imageMimeType = 'image/jpeg';
 
     <!-- Tel -->
     <label for="tel">Tel:</label>
-    <input type="tel" id="tel" name="tel" value="<?php echo $ptel; ?>">
+    <input type="tel" id="tel" name="tel" value="<?php echo htmlspecialchars($ptel); ?>">
     <br>
 
     <!-- Passport Image -->
