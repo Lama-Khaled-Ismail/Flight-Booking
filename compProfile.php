@@ -106,8 +106,7 @@ if($stmt){
     // Bind the result
     mysqli_stmt_bind_result($stmt, $cname, $cemail, $ctel, $cphoto);
 
-     // Fetch the result
-     mysqli_stmt_fetch($stmt);
+    
 
     // Fetch the result
     mysqli_stmt_fetch($stmt);
