@@ -29,6 +29,8 @@ function checkCredentials($conn, $entity, $name, $pass) {
             // TO AVOID SESSION FIXATION
             session_regenerate_id(true);
             $_SESSION['username'] = $name;
+            $_SESSION['login_time'] = time();
+
 
             $stmt->close();
             return true;

@@ -4,6 +4,8 @@ require_once("config.php");
 include_once("session.php");
 include_once("decrypt.php");
 include_once("encrypt.php");
+include("checkexpiry.php");
+
 
 if(!isset($_GET['source']) || decrypt($_GET['source']) !== 'searchFlight_display') {
         echo "Can't access flight details page without inputting submitting form";exit;

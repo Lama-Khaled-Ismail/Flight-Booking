@@ -77,8 +77,8 @@
         require_once("config.php");
         include_once("session.php");
         include_once("encrypt.php");
-        
-        
+        include("checkexpiry.php");
+
         if($_SERVER['REQUEST_METHOD'] !== "GET" || !isset($_GET['search_flights']) ) {
             echo "<h1 style='color:black'>You have not logged in yet </h1>";
             exit;

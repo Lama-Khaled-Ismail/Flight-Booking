@@ -4,6 +4,7 @@ require_once("config.php");
 include_once("session.php");
 include_once("encrypt.php");
 include_once("decrypt.php");
+include("checkexpiry.php");
 
 
 if( !isset($_GET['source']) || decrypt($_GET['source']) !== "searchFlight" ){

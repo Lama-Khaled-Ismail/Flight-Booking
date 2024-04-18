@@ -2,8 +2,9 @@
     include('session.php');
     include('sanitize.php');
     require_once('config.php');
-
-    $comname = $_SESSION['username'];
+    include("checkexpiry.php");
+ 
+    $comname = decrypt($_SESSION['username']);
      
    
     if(isset($_POST['submit']))

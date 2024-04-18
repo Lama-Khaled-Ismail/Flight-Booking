@@ -1,4 +1,7 @@
 <?php
+include("session.php");
+include("checkexpiry.php");
+
 // Start HTML output with styling
 echo '<html>
         <head>

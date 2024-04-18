@@ -11,7 +11,7 @@ if(isset($_SESSION['username'])) {
 
     // Destroy the session
     session_destroy();
-
+    echo "<h1>Session Ended. You will be redirected to login page</h1>";
     // Redirect the user to the login page or any other page
     header("Location: login.html");
     exit;

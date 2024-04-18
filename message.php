@@ -5,6 +5,7 @@ require_once("config.php");
 include_once("session.php");
 include_once("encrypt.php");
 include_once("decrypt.php");
+include("checkexpiry.php");
 
 
 if ($_SERVER['REQUEST_METHOD'] !== "POST" || !isset($_POST['message'])) {

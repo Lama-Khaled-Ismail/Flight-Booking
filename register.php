@@ -32,33 +32,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             $pass = password_hash($pass, PASSWORD_DEFAULT);
-            if($_POST['type'] == 'passenger')
-                    $sql = 'INSERT INTO passenger(name,email,password,tel) VALUES (?, ?, ?, ?)';  
-            else
-                    $sql = 'INSERT INTO company(Name,email,password,tel) VALUES (?, ?, ?, ?)'; 
-            $stmt = $conn->prepare($sql);
+            $redirectPage = ($_POST['type'] == 'passenger') ? 'passReg.html' : 'compReg.html';
+            $_SESSION['registration_data'] = array(
+                'username' => $name,
+                'email' => $email,
+                'password' => $pass,
+                'telephone' => $tel
+            );
+                
+            header('Location: '.$redirectPage);
+            // if($_POST['type'] == 'passenger')
+            //         $sql = 'INSERT INTO passenger(name,email,password,tel) VALUES (?, ?, ?, ?)';  
+            // else
+            //         $sql = 'INSERT INTO company(Name,email,password,tel) VALUES (?, ?, ?, ?)'; 
+            // $stmt = $conn->prepare($sql);
+            // session_regenerate_id();
 
-            // Bind parameters (s for string)
-            $stmt->bind_param("ssss", $name, $email, $pass, $tel);
-            $_SESSION['username']=validateAndSanitize($name);
+            // // Bind parameters (s for string)
+            // $stmt->bind_param("ssss", $name, $email, $pass, $tel);
+            // $_SESSION['username']=validateAndSanitize($name);
 
-            // Execute the prepared statement
-            $stmt->execute();
+            // // Execute the prepared statement
+            // $stmt->execute();
 
-            if($_POST['type']=='passenger'){
-                mysqli_close($conn);  
+            // if($_POST['type']=='passenger'){
+            //     mysqli_close($conn);  
 
-                header('Location: passReg.html');
+            //     header('Location: passReg.html');
 
 
-                exit;
-            }
-            else{
-                mysqli_close($conn);  
-                header('Location: compReg.html');
-                exit;
+            //     exit;
+            // }
+            // else{
+            //     mysqli_close($conn);  
+            //     header('Location: compReg.html');
+            //     exit;
 
-            }
+            // }
             
             
 

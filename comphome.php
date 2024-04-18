@@ -1,6 +1,8 @@
 <?php
 include('session.php');
+include("checkexpiry.php");
 require_once("config.php");
+
 
 $conn = mysqli_connect(DB_HOST, DB_USERNAME,DB_PASSWORD,DB_NAME);  
 
@@ -8,10 +10,14 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 //print_r($_SESSION); //echo $comname;
+
 if (isset($_SESSION['username'])) {
   $comname = $_SESSION['username'];
-  //echo $comname;
+}else{
+  header("Location: logout.php");
 }
+
+
  $sql = "SELECT * FROM company WHERE Name = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $_SESSION['username']);
@@ -31,7 +37,7 @@ $result = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html>
-<title>W3.CSS Template</title>
+<title><?php echo $comname?>'s Home Page</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">

@@ -73,6 +73,9 @@ cursor: pointer;
     <?php
     
         include('passHome.php');
+        include("checkexpiry.php");
+        include("session.php");
+
     ?>
 
     <div id="profile">

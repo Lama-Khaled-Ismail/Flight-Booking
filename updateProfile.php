@@ -2,7 +2,9 @@
     include('session.php');
     include('sanitize.php');
     require_once('config.php');
-    $username = $_SESSION['username'];
+    include("checkexpiry.php");
+
+    $username = decrypt($_SESSION['username']);
      //for testing purposes
     //$username='menna hussein';
     
@@ -85,8 +87,8 @@
 
         $stmt -> close();
 
-        $_SESSION['username'] = $name;
-        $username=$_SESSION['username'];
+        //$_SESSION['username'] = $name;
+        $username=decrypt($_SESSION['username']);
 
         if (isset( $_POST["image"])){
             $data = $_POST["image"];

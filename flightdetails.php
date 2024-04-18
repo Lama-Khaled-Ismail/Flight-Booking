@@ -1,7 +1,8 @@
 <?php
 include('session.php');
-$dbname = 'flight_booking';
-$conn = new mysqli('localhost', "root", "", $dbname);
+include("checkexpiry.php");
+require_once("config.php");
+
 $sql = "SELECT * FROM company WHERE Name = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $_SESSION['username']);

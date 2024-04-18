@@ -1,35 +1,28 @@
 <html>
 <body>
 <?php
-include_once("db.php");
 include_once("session.php");
 include_once("encrypt.php");
 require_once ('config.php');
 
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['passreg'])) {
 
     $conn = mysqli_connect(DB_HOST, DB_USERNAME,DB_PASSWORD,DB_NAME);  
     if ($conn->connect_error) {
         die('Connection failed: ' . $conn->connect_error);
     }
 
-    // Fetching the latest ID
-
+    if(!isset($_SESSION['registration_data'])){
+        echo "Register name password email first";exit;
+    }
+    $name = $_SESSION['registration_data']['username'];
+    $email = $_SESSION['registration_data']['email'];
+    $pass = $_SESSION['registration_data']['password'];
+    $tel = $_SESSION['registration_data']['telephone'];
     
-    $qry = "SELECT ID FROM passenger where name = ?";
-    $stmt = $conn->prepare($qry);
-    $stmt->bind_param("s",$_SESSION['username']);
-    $stmt->execute();
-    $stmt->bind_result($id);
-    $stmt->fetch();
-    $stmt->close();
-    if ($id) {
-        echo "ID: " . $id . "<br>";
-        echo "Name: " . $_SESSION['username'] . "<br>";
-
         // Prepare statements to update data
-        $stmt = $conn->prepare("UPDATE passenger SET Account = ? WHERE ID = ?");
+        $stmt = $conn->prepare("INSERT INTO passenger (Name,email,password,tel,Account) VALUES (?,?,?,?,?)");
         if (!$stmt) {
             // Prepare failed
             echo $stmt->error_log;
@@ -42,25 +35,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 exit;
             }
 
-            $stmt->bind_param('si',encrypt($acc),$id);
+            $stmt->bind_param('sssss',$name,$email,$pass,$tel,encrypt($acc));
              $stmt->execute();
              // $stmt->send_long_data(4, $blob); 
              $stmt->close();
              $conn->close();
-
+             $_SESSION['username']=encrypt(validateAndSanitize($name));
+             $_SESSION['login_time'] =time();
+             unset($_SESSION['registration_data']);
+ 
              header('Location: passHomehtml.php');
 
              exit;
 
     }
     
-    }
+    
     $conn->close();
 } else {
 }
 
 function isValidNumber($Number) {
     return preg_match("/^[0-9]+$/", $Number) && strlen($Number) ==11;
+}
+function validateAndSanitize($input) {
+    // Trim whitespace from the beginning and end of the input
+    $input = trim($input);
+    // Remove any HTML tags and encode special characters
+    $input = htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
+    if (empty($input)) {
+        return null; // Validation failed
+    }
+    return $input;
 }
 
 ?>
